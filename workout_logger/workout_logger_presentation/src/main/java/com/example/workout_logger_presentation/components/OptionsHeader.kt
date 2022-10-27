@@ -27,6 +27,7 @@ import com.hbaez.core_ui.LocalSpacing
 
 @Composable
 fun OptionsHeader(
+    onNavigateToCreate: () -> Unit,
     modifier: Modifier = Modifier
 ){
     val spacing = LocalSpacing.current
@@ -48,7 +49,11 @@ fun OptionsHeader(
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
         AddButton(text = "Start Workout", onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.height(spacing.spaceLarge))
-        AddButton(text = "Create Workout", onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth())
+        AddButton(text = "Create Workout", onClick = {
+                                                     onNavigateToCreate(
+
+                                                     )
+                                                     }, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
     }
 }

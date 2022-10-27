@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
+import com.example.workout_logger_presentation.create_workout.CreateWorkoutScreen
 import com.example.workout_logger_presentation.workout_logger_overview.WorkoutLoggerOverviewScreen
 import com.hbaez.workoutlogger.ui.theme.CaloryTrackerTheme
 import com.hbaez.core.domain.preferences.Preferences
@@ -112,7 +113,17 @@ class MainActivity : ComponentActivity() {
 //                        }
 
                         composable(Route.WORKOUT_OVERVIEW) {
-                            WorkoutLoggerOverviewScreen()
+                            WorkoutLoggerOverviewScreen(
+                                onNavigateToCreate = {
+                                    navController.navigate(
+                                        Route.WORKOUT_CREATE
+                                    )
+                                }
+                            )
+                        }
+
+                        composable(Route.WORKOUT_CREATE) {
+                            CreateWorkoutScreen()
                         }
 
 //                        composable(

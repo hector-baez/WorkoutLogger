@@ -23,7 +23,7 @@ import com.hbaez.core_ui.LocalSpacing
 @ExperimentalCoilApi
 @Composable
 fun WorkoutLoggerOverviewScreen(
-//    onNavigateToSearch: (String, Int, Int, Int) -> Unit,
+    onNavigateToCreate: () -> Unit,
     viewModel: WorkoutLoggerOverviewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
@@ -35,7 +35,10 @@ fun WorkoutLoggerOverviewScreen(
             .padding(bottom = spacing.spaceMedium)
     ) {
         item {
-            OptionsHeader(modifier = Modifier.fillMaxWidth())
+            OptionsHeader(
+                onNavigateToCreate,
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             DaySelector(
                 date = state.date,
