@@ -1,0 +1,19 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+    }
+}
+rootProject.name = "CaloryTracker"
+include ':app'
+include ':core'
+include ':tracker:tracker_data'
+include ':tracker:tracker_domain'
+include ':tracker:tracker_presentation'
+include ':core-ui'
+include ':workout_logger'
+include ':workout_logger:workout_logger_data'
+include ':workout_logger:workout_logger_domain'
+include ':workout_logger:workout_logger_presentation'

@@ -1,0 +1,15 @@
+package com.example.workout_logger_data.local.entity
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class ExerciseEntity(
+    @PrimaryKey val id: Int? = null,
+    val name: String,
+    val exerciseBase: Int,
+    val description: String?,
+    val muscles: String?,
+    val muscles_secondary: String?,
+    val equipment: String?
+)
