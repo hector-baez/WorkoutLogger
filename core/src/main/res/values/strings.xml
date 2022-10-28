@@ -59,4 +59,10 @@
     <string name="your_goal">Your goal:</string>
     <string name="delete">Delete</string>
     <string name="workout_name">Workout Name</string>
+    <string name="exercise">Exercise</string>
+    <string name="sets">Sets</string>
+    <string name="reps">Reps</string>
+    <string name="rest">Rest</string>
+    <string name="weight">Weight</string>
+    <string name="exercise_id">ID</string>
 </resources>

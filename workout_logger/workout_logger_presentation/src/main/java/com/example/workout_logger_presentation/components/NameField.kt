@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -43,8 +44,9 @@ fun NameField(
     Box(
         modifier = modifier
     ) {
-        BasicTextField(
+        OutlinedTextField(
             value = text,
+            label = { Text(text = stringResource(id = R.string.workout_name)) } ,
             onValueChange = onValueChange,
             singleLine = true,
             modifier = Modifier
@@ -54,7 +56,7 @@ fun NameField(
                     elevation = 2.dp,
                     shape = RoundedCornerShape(5.dp)
                 )
-                .background(MaterialTheme.colors.surface)
+                .background(MaterialTheme.colors.background)
                 .fillMaxWidth()
                 .padding(spacing.spaceMedium)
                 .padding(end = spacing.spaceMedium)
@@ -66,7 +68,7 @@ fun NameField(
                 text = hint,
                 style = MaterialTheme.typography.body1,
                 fontWeight = FontWeight.Light,
-                color = Color.LightGray,
+                color = Color.White,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = spacing.spaceMedium)
