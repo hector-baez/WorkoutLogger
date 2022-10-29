@@ -24,6 +24,9 @@ class CreateWorkoutViewModel @Inject constructor(
 
     fun onEvent(event: CreateWorkoutEvent) {
         when(event) {
+            is CreateWorkoutEvent.OnAddExercise -> {
+                addExercise()
+            }
             is CreateWorkoutEvent.OnWorkoutNameChange -> {
                 state = state.copy(workoutName = event.name)
             }
@@ -33,7 +36,63 @@ class CreateWorkoutViewModel @Inject constructor(
                     isHintVisible = !event.isFocused && state.workoutName.isBlank()
                 )
             }
+
+            is CreateWorkoutEvent.OnTrackableExerciseUiNameChange -> {
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.map {
+                        if (it.id == event.trackableExerciseUiState.id) {
+                            it.copy(name = event.name)
+                        } else it
+                    }
+                )
+            }
+
+            is CreateWorkoutEvent.OnTrackableExerciseUiSetsChange -> {
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.map {
+                        if (it.id == event.trackableExerciseUiState.id) {
+                            it.copy(sets = event.sets)
+                        } else it
+                    }
+                )
+            }
+
+            is CreateWorkoutEvent.OnTrackableExerciseUiRepsChange -> {
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.map {
+                        if (it.id == event.trackableExerciseUiState.id) {
+                            it.copy(reps = event.reps)
+                        } else it
+                    }
+                )
+            }
+
+            is CreateWorkoutEvent.OnTrackableExerciseUiRestChange -> {
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.map {
+                        if (it.id == event.trackableExerciseUiState.id) {
+                            it.copy(rest = event.rest)
+                        } else it
+                    }
+                )
+            }
+
+            is CreateWorkoutEvent.OnTrackableExerciseUiWeightChange -> {
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.map {
+                        if (it.id == event.trackableExerciseUiState.id) {
+                            it.copy(weight = event.weight)
+                        } else it
+                    }
+                )
+            }
         }
+    }
+
+    private fun addExercise(){
+        state = state.copy(
+            trackableExercises = state.trackableExercises + TrackableExerciseUiState(id = state.trackableExercises.size, exercise = null)
+        )
     }
 
 }

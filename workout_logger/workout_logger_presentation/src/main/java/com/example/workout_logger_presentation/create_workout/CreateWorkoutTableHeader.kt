@@ -21,19 +21,17 @@ import com.hbaez.workout_logger_presentation.R
 
 @Composable
 fun CreateWorkoutTableHeader(
-
 ){
     val spacing = LocalSpacing.current
 
     Row(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
-        TableCell(text = stringResource(id = R.string.exercise), weight = .33f, 12.sp)
-        TableCell(text = stringResource(id = R.string.sets), weight = .11f, 10.sp)
-        TableCell(text = stringResource(id = R.string.reps), weight = .11f, 10.sp)
-        TableCell(text = stringResource(id = R.string.rest), weight = .15f, 10.sp)
-        TableCell(text = stringResource(id = R.string.weight), weight = .15f, 10.sp)
-        TableCell(text = stringResource(id = R.string.exercise_id), weight = .15f, 12.sp)
+        TableCell(text = stringResource(id = R.string.exercise), weight = .38f, 12.sp)
+        TableCell(text = stringResource(id = R.string.sets), weight = .13f, 10.sp)
+        TableCell(text = stringResource(id = R.string.reps), weight = .13f, 10.sp)
+        TableCell(text = stringResource(id = R.string.rest), weight = .18f, 10.sp)
+        TableCell(text = stringResource(id = R.string.weight), weight = .18f, 10.sp)
 
     }
 }
