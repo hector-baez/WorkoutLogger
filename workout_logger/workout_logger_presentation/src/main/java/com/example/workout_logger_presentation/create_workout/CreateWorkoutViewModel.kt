@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.hbaez.core.domain.preferences.Preferences
 import com.hbaez.core.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -82,6 +81,26 @@ class CreateWorkoutViewModel @Inject constructor(
                     trackableExercises = state.trackableExercises.map {
                         if (it.id == event.trackableExerciseUiState.id) {
                             it.copy(weight = event.weight)
+                        } else it
+                    }
+                )
+            }
+
+            is CreateWorkoutEvent.OnDraggableRowExpand -> {
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.map {
+                        if(it.id == event.id) {
+                            it.copy(isRevealed = true)
+                        } else it
+                    }
+                )
+            }
+
+            is CreateWorkoutEvent.OnDraggableRowCollapse -> {
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.map {
+                        if(it.id == event.id){
+                            it.copy(isRevealed = false)
                         } else it
                     }
                 )

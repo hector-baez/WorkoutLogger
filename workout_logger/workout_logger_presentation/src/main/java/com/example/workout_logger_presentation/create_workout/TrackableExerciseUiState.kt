@@ -9,5 +9,6 @@ data class TrackableExerciseUiState(
     val rest: String = "0",
     val weight: String = "0",
     val id: Int = 0,
-    val exercise: TrackedExercise?
+    val exercise: TrackedExercise?,
+    val isRevealed: Boolean = false
 )

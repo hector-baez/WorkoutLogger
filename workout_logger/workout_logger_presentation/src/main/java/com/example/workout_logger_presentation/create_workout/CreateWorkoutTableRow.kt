@@ -4,23 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.hbaez.core_ui.LocalSpacing
-import com.hbaez.workout_logger_presentation.R
 
 @Composable
 fun CreateWorkoutTableRow(
@@ -29,10 +23,12 @@ fun CreateWorkoutTableRow(
 ){
     val spacing = LocalSpacing.current
 
+    Spacer(modifier = Modifier.height(spacing.spaceMedium))
     Row(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ){
         EditTableCell(
+            trackableExerciseUiState =trackableExerciseUiState,
             text = trackableExerciseUiState.name,
             weight = .32f,
             keyboardType = KeyboardType.Text,
@@ -41,6 +37,7 @@ fun CreateWorkoutTableRow(
             }
         )
         EditTableCell(
+            trackableExerciseUiState =trackableExerciseUiState,
             text = trackableExerciseUiState.sets,
             weight = .16f,
             keyboardType = KeyboardType.Number,
@@ -52,6 +49,7 @@ fun CreateWorkoutTableRow(
             }
         )
         EditTableCell(
+            trackableExerciseUiState =trackableExerciseUiState,
             text = trackableExerciseUiState.reps,
             weight = .16f,
             keyboardType = KeyboardType.Number,
@@ -60,6 +58,7 @@ fun CreateWorkoutTableRow(
             }
         )
         EditTableCell(
+            trackableExerciseUiState =trackableExerciseUiState,
             text = trackableExerciseUiState.rest,
             weight = .18f,
             keyboardType = KeyboardType.Number,
@@ -68,6 +67,7 @@ fun CreateWorkoutTableRow(
             }
         )
         EditTableCell(
+            trackableExerciseUiState =trackableExerciseUiState,
             text = trackableExerciseUiState.weight,
             weight = .18f,
             keyboardType = KeyboardType.Number,
@@ -77,10 +77,12 @@ fun CreateWorkoutTableRow(
         )
 
     }
+    Spacer(modifier = Modifier.height(spacing.spaceMedium))
 }
 
 @Composable
 fun RowScope.EditTableCell(
+    trackableExerciseUiState: TrackableExerciseUiState,
     text: String,
     weight: Float,
     keyboardType: KeyboardType,
@@ -94,6 +96,7 @@ fun RowScope.EditTableCell(
             .border(1.dp, MaterialTheme.colors.onBackground)
             .weight(weight)
             .fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType)
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+        enabled = !trackableExerciseUiState.isRevealed
     )
 }
