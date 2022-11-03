@@ -1,6 +1,8 @@
 package com.example.workout_logger_presentation.create_workout
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -11,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +30,12 @@ import com.example.workout_logger_presentation.components.NameField
 import com.example.workout_logger_presentation.create_workout.components.DraggableRow
 import com.hbaez.core_ui.LocalSpacing
 import com.hbaez.workout_logger_presentation.R
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 @ExperimentalCoilApi
 @Composable
@@ -34,52 +44,73 @@ fun CreateWorkoutScreen(
 ) {
     val spacing = LocalSpacing.current
     val state = viewModel.state
+
     val context = LocalContext.current
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(spacing.spaceMedium)
     ) {
-        NameField(
-            text = state.workoutName,
-            onValueChange = {
-                            viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameChange(it))
-            },
-            onFocusChanged = {
-                viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameFocusChange(it.isFocused))
-            }
-        )
-        Spacer(modifier = Modifier.height(spacing.spaceSmall))
-        CreateWorkoutTableHeader()
-        state.trackableExercises.map {
-            Box(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)){
-                Box(modifier = Modifier
-                    .width(150.dp)
-                    .fillMaxHeight()
-                    .clip(RectangleShape)
-                    .background(MaterialTheme.colors.error))
+        item {
+            NameField(
+                text = state.workoutName,
+                onValueChange = {
+                    viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameChange(it))
+                },
+                onFocusChanged = {
+                    viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameFocusChange(it.isFocused))
+                }
+            )
+            Spacer(modifier = Modifier.height(spacing.spaceSmall))
+            CreateWorkoutTableHeader()
+            AddButton(
+                text = stringResource(id = R.string.add_exercise),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    viewModel.onEvent(CreateWorkoutEvent.OnAddExercise)
+                }
+            )
+        }
+        items(state.trackableExercises){
+            Log.println(Log.DEBUG, "!!!!!!!!!!!!!!!!!!", it.toString())
+            if (!it.isDeleted){
                 DraggableRow(
-                    row = it,
-                    viewModel = viewModel,
+                    name = it.name,
+                    sets = it.sets,
+                    reps = it.reps,
+                    rest = it.rest,
+                    weight = it.weight,
                     isRevealed = it.isRevealed,
+                    id = it.id,
                     cardOffset = 400f,
-                    onExpand = {
-                        viewModel.onEvent(CreateWorkoutEvent.OnDraggableRowExpand(it.id))
+                    onExpand = { id ->
+                        viewModel.onEvent(CreateWorkoutEvent.OnDraggableRowExpand(id))
                     },
-                    onCollapse = {
-                        viewModel.onEvent(CreateWorkoutEvent.OnDraggableRowCollapse(it.id))
+                    onCollapse = { id ->
+                        viewModel.onEvent(CreateWorkoutEvent.OnDraggableRowCollapse(id))
+                    },
+                    onNameChange = { newText ->
+                        viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiNameChange(newText, it))
+                    },
+                    onSetsChange = { newText ->
+                        viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiSetsChange(newText, it))
+                    },
+                    onRepsChange = { newText ->
+                        viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiRepsChange(newText, it))
+                    },
+                    onRestChange = { newText ->
+                        viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiRestChange(newText, it))
+                    },
+                    onWeightChange = { newText ->
+                        viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiWeightChange(newText, it))
+                    },
+                    onDeleteClick = {
+                        viewModel.onEvent(CreateWorkoutEvent.OnRemoveTableRow(it.id))
                     }
                 )
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
             }
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
         }
-        AddButton(
-            text = stringResource(id = R.string.add_exercise),
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                viewModel.onEvent(CreateWorkoutEvent.OnAddExercise)
-            }
-        )
     }
 }

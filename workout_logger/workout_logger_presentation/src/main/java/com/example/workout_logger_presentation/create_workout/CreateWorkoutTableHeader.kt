@@ -27,9 +27,9 @@ fun CreateWorkoutTableHeader(
     Row(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
-        TableCell(text = stringResource(id = R.string.exercise), weight = .38f, 12.sp)
-        TableCell(text = stringResource(id = R.string.sets), weight = .13f, 10.sp)
-        TableCell(text = stringResource(id = R.string.reps), weight = .13f, 10.sp)
+        TableCell(text = stringResource(id = R.string.exercise), weight = .32f, 12.sp)
+        TableCell(text = stringResource(id = R.string.sets), weight = .16f, 10.sp)
+        TableCell(text = stringResource(id = R.string.reps), weight = .16f, 10.sp)
         TableCell(text = stringResource(id = R.string.rest), weight = .18f, 10.sp)
         TableCell(text = stringResource(id = R.string.weight), weight = .18f, 10.sp)
 

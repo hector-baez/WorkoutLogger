@@ -18,8 +18,17 @@ import com.hbaez.core_ui.LocalSpacing
 
 @Composable
 fun CreateWorkoutTableRow(
-    trackableExerciseUiState: TrackableExerciseUiState,
-    viewModel: CreateWorkoutViewModel
+    onNameChange: (String) -> Unit,
+    onSetsChange: (String) -> Unit,
+    onRepsChange: (String) -> Unit,
+    onRestChange: (String) -> Unit,
+    onWeightChange: (String) -> Unit,
+    name: String,
+    sets: String,
+    reps: String,
+    rest: String,
+    weight: String,
+    isRevealed: Boolean
 ){
     val spacing = LocalSpacing.current
 
@@ -28,51 +37,48 @@ fun CreateWorkoutTableRow(
         modifier = Modifier.background(MaterialTheme.colors.background)
     ){
         EditTableCell(
-            trackableExerciseUiState =trackableExerciseUiState,
-            text = trackableExerciseUiState.name,
+            isRevealed = isRevealed,
+            text = name,
             weight = .32f,
             keyboardType = KeyboardType.Text,
             onValueChange = {
-                viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiNameChange(it, trackableExerciseUiState))
+                onNameChange(it)
             }
         )
         EditTableCell(
-            trackableExerciseUiState =trackableExerciseUiState,
-            text = trackableExerciseUiState.sets,
+            isRevealed = isRevealed,
+            text = sets,
             weight = .16f,
             keyboardType = KeyboardType.Number,
             onValueChange = {
-                if (it.isEmpty()){
-
-                }
-                viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiSetsChange(it, trackableExerciseUiState))
+                onSetsChange(it)
             }
         )
         EditTableCell(
-            trackableExerciseUiState =trackableExerciseUiState,
-            text = trackableExerciseUiState.reps,
+            isRevealed = isRevealed,
+            text = reps,
             weight = .16f,
             keyboardType = KeyboardType.Number,
             onValueChange = {
-                viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiRepsChange(it, trackableExerciseUiState))
+                onRepsChange(it)
             }
         )
         EditTableCell(
-            trackableExerciseUiState =trackableExerciseUiState,
-            text = trackableExerciseUiState.rest,
+            isRevealed = isRevealed,
+            text = rest,
             weight = .18f,
             keyboardType = KeyboardType.Number,
             onValueChange = {
-                viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiRestChange(it, trackableExerciseUiState))
+                onRestChange(it)
             }
         )
         EditTableCell(
-            trackableExerciseUiState =trackableExerciseUiState,
-            text = trackableExerciseUiState.weight,
+            isRevealed = isRevealed,
+            text = weight,
             weight = .18f,
             keyboardType = KeyboardType.Number,
             onValueChange = {
-                viewModel.onEvent(CreateWorkoutEvent.OnTrackableExerciseUiWeightChange(it, trackableExerciseUiState))
+                onWeightChange(it)
             }
         )
 
@@ -82,7 +88,7 @@ fun CreateWorkoutTableRow(
 
 @Composable
 fun RowScope.EditTableCell(
-    trackableExerciseUiState: TrackableExerciseUiState,
+    isRevealed: Boolean,
     text: String,
     weight: Float,
     keyboardType: KeyboardType,
@@ -97,6 +103,6 @@ fun RowScope.EditTableCell(
             .weight(weight)
             .fillMaxWidth(),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-        enabled = !trackableExerciseUiState.isRevealed
+        enabled = !isRevealed
     )
 }

@@ -22,4 +22,6 @@ sealed class CreateWorkoutEvent {
 
     data class OnDraggableRowCollapse(val id: Int): CreateWorkoutEvent()
 
+    data class OnRemoveTableRow(val id: Int): CreateWorkoutEvent()
+
 }
