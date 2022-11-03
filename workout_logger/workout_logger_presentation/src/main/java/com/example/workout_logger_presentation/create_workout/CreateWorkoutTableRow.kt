@@ -100,6 +100,7 @@ fun RowScope.EditTableCell(
         singleLine = true,
         modifier = Modifier
             .border(1.dp, MaterialTheme.colors.onBackground)
+            .background(MaterialTheme.colors.surface)
             .weight(weight)
             .fillMaxWidth(),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
