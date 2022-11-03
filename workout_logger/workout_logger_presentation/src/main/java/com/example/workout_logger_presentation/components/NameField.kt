@@ -59,7 +59,7 @@ fun NameField(
                 .background(MaterialTheme.colors.background)
                 .fillMaxWidth()
                 .padding(spacing.spaceMedium)
-                .padding(end = spacing.spaceMedium)
+                .padding(end = spacing.spaceExtraLarge)
                 .onFocusChanged { onFocusChanged(it) }
                 .testTag("workoutname_textfield")
         )
