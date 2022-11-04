@@ -118,37 +118,6 @@ class CreateWorkoutViewModel @Inject constructor(
                         } else it
                     }.toMutableList()
                 )
-//                val item = state.trackableExercises.find { it.id == event.id }
-//                val index = state.trackableExercises.indexOf(item)
-//                val tmpList = state.trackableExercises.toMutableList()
-//                var tmpIndex = 0
-//                var pastNull = false
-//                tmpList.removeAt(index)
-//                var currIndex = 0
-//                state = state.copy(
-////                    trackableExercises = state.trackableExercises.drop(state.trackableExercises.size)
-//                    trackableExercises = tmpList
-//                )
-//                state = state.copy(
-//                        trackableExercises = state.trackableExercises.toList().map {
-//                            val tmpItem = tmpList[currIndex]
-//                            currIndex += 1
-//                            it.copy(
-//                                    name = tmpItem.name,
-//                                    sets = tmpItem.sets,
-//                                    reps = tmpItem.reps,
-//                                    rest = tmpItem.rest,
-//                                    weight = tmpItem.weight,
-//                                    id = tmpItem.id,
-//                                    exercise = tmpItem.exercise,
-//                                    isRevealed = tmpItem.isRevealed
-//                                ) ?: it.copy()
-//                        }.toMutableList()
-////                    trackableExercises = state.trackableExercises.filter {
-////                        it.id != event.id
-////                    }
-////                    trackableExercises = tmpList.toList()
-//                )
 
             }
         }

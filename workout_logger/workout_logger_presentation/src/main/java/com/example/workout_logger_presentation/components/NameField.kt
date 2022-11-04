@@ -2,8 +2,10 @@ package com.example.workout_logger_presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -51,15 +53,14 @@ fun NameField(
             singleLine = true,
             modifier = Modifier
                 .clip(RoundedCornerShape(5.dp))
-                .padding(2.dp)
                 .shadow(
                     elevation = 2.dp,
                     shape = RoundedCornerShape(5.dp)
                 )
                 .background(MaterialTheme.colors.background)
-                .fillMaxWidth()
+                .width(IntrinsicSize.Max)
                 .padding(spacing.spaceMedium)
-                .padding(end = spacing.spaceExtraLarge)
+                .padding(end = spacing.spaceSmall)
                 .onFocusChanged { onFocusChanged(it) }
                 .testTag("workoutname_textfield")
         )

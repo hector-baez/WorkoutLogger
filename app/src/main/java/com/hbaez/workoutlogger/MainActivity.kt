@@ -123,7 +123,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Route.WORKOUT_CREATE) {
-                            CreateWorkoutScreen()
+                            CreateWorkoutScreen(
+                                onNavigateToSearchExercise = {
+                                    navController.navigate(Route.WORKOUT_SEARCH)
+                                }
+                            )
                         }
 
 //                        composable(
