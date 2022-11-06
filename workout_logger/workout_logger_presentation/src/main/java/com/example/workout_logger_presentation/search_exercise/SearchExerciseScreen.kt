@@ -38,6 +38,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import com.example.workout_logger_presentation.components.SearchTextField
+import com.example.workout_logger_presentation.search_exercise.components.TrackableExerciseItem
 import com.hbaez.core.util.UiEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -114,7 +115,15 @@ fun SearchExerciseScreen(
                 .padding(spacing.spaceMedium)
         ) {
             items(state.trackableExercise) {
-                /*TODO*/
+                TrackableExerciseItem(
+                    trackableExerciseState = it,
+                    onClick = {
+                              /*TODO*/
+                    },
+                    onTrack = {
+                              /*TODO*/
+                    },
+                )
             }
         }
         Box(
