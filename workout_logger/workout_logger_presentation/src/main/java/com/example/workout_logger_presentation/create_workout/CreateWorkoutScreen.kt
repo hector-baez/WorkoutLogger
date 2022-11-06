@@ -84,7 +84,7 @@ fun CreateWorkoutScreen(
                     .padding(padding)
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(spacing.spaceMedium)
+//                    .padding(spacing.spaceMedium)
             ) {
                 items(state.trackableExercises) {
                     if (!it.isDeleted) {
@@ -147,7 +147,7 @@ fun CreateWorkoutScreen(
                                 viewModel.onEvent(CreateWorkoutEvent.OnRemoveTableRow(it.id))
                             }
                         )
-                        Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                        Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
                     }
                 }
             }
