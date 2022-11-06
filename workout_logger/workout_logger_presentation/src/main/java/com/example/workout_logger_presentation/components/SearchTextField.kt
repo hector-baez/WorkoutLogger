@@ -2,10 +2,8 @@ package com.example.workout_logger_presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -13,7 +11,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -27,6 +24,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -34,35 +32,46 @@ import com.hbaez.core_ui.LocalSpacing
 import com.hbaez.workout_logger_presentation.R
 
 @Composable
-fun NameField(
+fun SearchTextField(
     text: String,
     onValueChange: (String) -> Unit,
+    onSearch: () -> Unit,
     modifier: Modifier = Modifier,
-    hint: String,
+    hint: String = stringResource(id = R.string.search),
     shouldShowHint: Boolean = false,
     onFocusChanged: (FocusState) -> Unit
-){
+) {
     val spacing = LocalSpacing.current
     Box(
         modifier = modifier
     ) {
-        OutlinedTextField(
+        BasicTextField(
             value = text,
-            label = { Text(text = hint) } ,
             onValueChange = onValueChange,
             singleLine = true,
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearch()
+                    defaultKeyboardAction(ImeAction.Search)
+                }
+            ),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search,
+            ),
+            textStyle = TextStyle(MaterialTheme.colors.onBackground),
             modifier = Modifier
                 .clip(RoundedCornerShape(5.dp))
+                .padding(2.dp)
                 .shadow(
                     elevation = 2.dp,
                     shape = RoundedCornerShape(5.dp)
                 )
-                .background(MaterialTheme.colors.background)
-                .width(IntrinsicSize.Max)
+                .background(MaterialTheme.colors.surface)
+                .fillMaxWidth()
                 .padding(spacing.spaceMedium)
-                .padding(end = spacing.spaceSmall)
+                .padding(end = spacing.spaceMedium)
                 .onFocusChanged { onFocusChanged(it) }
-                .testTag("workoutname_textfield")
+                .testTag("search_textfield")
         )
         if(shouldShowHint) {
             Text(
@@ -75,14 +84,14 @@ fun NameField(
                     .padding(start = spacing.spaceMedium)
             )
         }
-//        IconButton(
-//            onClick = onSearch,
-//            modifier = Modifier.align(Alignment.CenterEnd)
-//        ) {
-//            Icon(
-//                imageVector = Icons.Default.Search,
-//                contentDescription = stringResource(id = R.string.search)
-//            )
-//        }
+        IconButton(
+            onClick = onSearch,
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = stringResource(id = R.string.search)
+            )
+        }
     }
 }

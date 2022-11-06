@@ -8,7 +8,7 @@ class GetExerciseForName(
     private val repository: ExerciseRepository
 ) {
 
-    operator fun invoke(name: String): Flow<List<TrackedExercise>> {
-        return repository.getExercisesForName(name)
+    operator fun invoke(query: String): Flow<List<TrackedExercise>> {
+        return repository.getExercisesForName(query)
     }
 }

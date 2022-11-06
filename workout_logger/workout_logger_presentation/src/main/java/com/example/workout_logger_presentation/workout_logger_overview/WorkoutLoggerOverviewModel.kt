@@ -50,14 +50,6 @@ class WorkoutLoggerOverviewModel @Inject constructor(
     }
 
     private fun refreshWorkouts(){
-        getWorkoutsForDateJob?.cancel()
-        Log.println(Log.DEBUG, "!!!!!!!!!!!!!!!!", "refreshing")
-        getWorkoutsForDateJob = exerciseTrackerUseCases
-            .getExerciseForName("Axe Hold")
-            .onEach {
-                Log.println(Log.DEBUG, "!!!!!!!!!!!!!!!!", it[0].description!!)
-            }
-            .launchIn(viewModelScope)
     }
 
 }

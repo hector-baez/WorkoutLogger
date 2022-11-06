@@ -49,6 +49,7 @@ fun CreateWorkoutScreen(
                 Row{
                     NameField(
                         text = state.workoutName,
+                        hint = stringResource(id = R.string.workout_name),
                         onValueChange = {
                             viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameChange(it))
                         },

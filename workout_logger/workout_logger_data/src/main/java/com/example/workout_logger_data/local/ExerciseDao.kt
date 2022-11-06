@@ -16,7 +16,7 @@ interface ExerciseDao {
         """
             SELECT *
             FROM exerciseentity
-            WHERE name = :name
+            WHERE name LIKE '%' || :name || '%' COLLATE NOCASE
         """
     )
     fun getExerciseByName(name: String): Flow<List<ExerciseEntity>>
