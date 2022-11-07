@@ -11,5 +11,11 @@ data class ExerciseEntity(
     val description: String?,
     val muscles: String?,
     val muscles_secondary: String?,
-    val equipment: String?
+    val equipment: String?,
+    val image_url: String?,
+    val is_main: String?,
+    val muscle_name_main: String?,
+    val image_url_main: String?,
+    val image_url_secondary: String?,
+    val muscle_name_secondary: String?
 )

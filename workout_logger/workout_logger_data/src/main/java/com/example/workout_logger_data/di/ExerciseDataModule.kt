@@ -33,7 +33,6 @@ object ExerciseDataModule {
     @Provides
     @Singleton
     fun provideExerciseDatabase(app: Application): ExerciseDatabase {
-        Log.println(Log.DEBUG, "!!!!!!!!!!!!!", "reached here")
         return Room.databaseBuilder(
             app,
             ExerciseDatabase::class.java,
@@ -53,26 +52,4 @@ object ExerciseDataModule {
             dao = db.dao
         )
     }
-
-//    @Provides
-//    @Singleton
-//    fun provideTrackerDatabase(app: Application): TrackerDatabase {
-//        return Room.databaseBuilder(
-//            app,
-//            TrackerDatabase::class.java,
-//            "tracker_db"
-//        ).build()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideTrackerRepository(
-//        api: OpenFoodApi,
-//        db: TrackerDatabase
-//    ): TrackerRepository {
-//        return TrackerRepositoryImpl(
-//            dao = db.dao,
-//            api = api
-//        )
-//    }
 }

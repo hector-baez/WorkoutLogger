@@ -10,7 +10,7 @@ import com.example.workout_logger_domain.use_case.ExerciseTrackerUseCases
 import com.example.workout_logger_presentation.create_workout.TrackableExerciseUiState
 import com.hbaez.core.util.UiEvent
 import com.hbaez.core.util.UiText
-import com.hbaez.workout_logger_presentation.R
+import com.hbaez.core.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -31,6 +31,7 @@ class SearchExerciseViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private var getExerciseJob: Job? = null
+    private var getExerciseImageJob: Job? = null
 
     fun onEvent(event: SearchExerciseEvent) {
         when(event) {
@@ -58,12 +59,10 @@ class SearchExerciseViewModel @Inject constructor(
         getExerciseJob = searchExerciseUseCases
             .getExerciseForName(state.query)
             .onEach { exercises ->
-                Log.println(Log.DEBUG, "reached here ", "inside on each loop")
-                Log.println(Log.DEBUG, "exercises size", exercises.size.toString())
                 if(exercises.isEmpty()){
                     _uiEvent.send(
                         UiEvent.ShowSnackbar(
-                            UiText.StringResource(R.string.error_something_went_wrong)
+                            UiText.StringResource(R.string.empty_results)
                         )
                     )
                 }
@@ -75,5 +74,6 @@ class SearchExerciseViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+
     }
 }

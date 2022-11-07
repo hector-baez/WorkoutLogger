@@ -11,6 +11,12 @@ fun ExerciseEntity.toTrackedExercise(): TrackedExercise {
         description = description,
         muscles = muscles,
         muscles_secondary = muscles_secondary,
-        equipment = equipment
+        equipment = equipment,
+        image_url = image_url?.split(",") ?: emptyList(),
+        is_main = is_main,
+        muscle_name_main = muscle_name_main,
+        image_url_main = image_url_main?.split(",") ?: emptyList(),
+        image_url_secondary = image_url_secondary?.split(",") ?: emptyList(),
+        muscle_name_secondary = muscle_name_secondary
     )
 }

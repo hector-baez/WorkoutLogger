@@ -1,5 +1,6 @@
 package com.example.workout_logger_presentation.search_exercise.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,8 @@ import com.example.workout_logger_presentation.search_exercise.TrackableExercise
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,9 +58,10 @@ fun TrackableExerciseItem(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Log.println(Log.DEBUG, "Image url", trackableExerciseState.exercise.image_url.toString())
             Image(
                 painter = rememberImagePainter(
-                    data = "R.drawable.ic_exercise", // exercise.imageUrl
+                    data = if (trackableExerciseState.exercise.image_url.isNotEmpty()) trackableExerciseState.exercise.image_url[0] else "",
                     builder = {
                         crossfade(true)
                         error(R.drawable.ic_exercise)
@@ -68,11 +72,12 @@ fun TrackableExerciseItem(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(75.dp)
-                    .clip(RoundedCornerShape(topStart = 5.dp))
+                    .clip(RoundedCornerShape(topStart = 5.dp)),
+                colorFilter = ColorFilter.tint(Color.White)
             )
             Spacer(modifier = Modifier.width(spacing.spaceSmall))
             Text(
-                text = exercise.name,
+                text = exercise.name!!,
                 style = MaterialTheme.typography.body1,
                 maxLines = 2,
                 overflow = TextOverflow.Visible,
