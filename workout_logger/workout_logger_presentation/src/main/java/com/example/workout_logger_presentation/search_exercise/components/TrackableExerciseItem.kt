@@ -22,8 +22,10 @@ import com.example.workout_logger_presentation.search_exercise.TrackableExercise
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -58,6 +60,12 @@ fun TrackableExerciseItem(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val colorMatrix = floatArrayOf(
+                -1f, 0f, 0f, 0f, 255f,
+                0f, -1f, 0f, 0f, 255f,
+                0f, 0f, -1f, 0f, 255f,
+                0f, 0f, 0f, 1f, 0f
+            )
             Log.println(Log.DEBUG, "Image url", trackableExerciseState.exercise.image_url.toString())
             Image(
                 painter = rememberImagePainter(
@@ -73,7 +81,7 @@ fun TrackableExerciseItem(
                 modifier = Modifier
                     .size(75.dp)
                     .clip(RoundedCornerShape(topStart = 5.dp)),
-                colorFilter = ColorFilter.tint(Color.White)
+                colorFilter = ColorFilter.colorMatrix(ColorMatrix(colorMatrix))
             )
             Spacer(modifier = Modifier.width(spacing.spaceSmall))
             Text(
