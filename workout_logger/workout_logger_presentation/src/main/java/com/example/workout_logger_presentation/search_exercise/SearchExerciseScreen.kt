@@ -118,7 +118,7 @@ fun SearchExerciseScreen(
                 TrackableExerciseItem(
                     trackableExerciseState = it,
                     onClick = {
-                              /*TODO*/
+                              viewModel.onEvent(SearchExerciseEvent.OnToggleTrackableExercise(it))
                     },
                     onTrack = {
                               /*TODO*/

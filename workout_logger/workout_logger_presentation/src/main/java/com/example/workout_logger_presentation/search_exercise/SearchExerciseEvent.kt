@@ -7,4 +7,6 @@ sealed class SearchExerciseEvent {
     data class OnExerciseNameFocusChange(val isFocused: Boolean): SearchExerciseEvent()
 
     object OnSearch: SearchExerciseEvent()
+
+    data class OnToggleTrackableExercise(val exercise: TrackableExerciseState): SearchExerciseEvent()
 }

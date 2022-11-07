@@ -31,7 +31,6 @@ class SearchExerciseViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private var getExerciseJob: Job? = null
-    private var getExerciseImageJob: Job? = null
 
     fun onEvent(event: SearchExerciseEvent) {
         when(event) {
@@ -47,6 +46,16 @@ class SearchExerciseViewModel @Inject constructor(
 
             is SearchExerciseEvent.OnSearch -> {
                 executeSearch()
+            }
+
+            is SearchExerciseEvent.OnToggleTrackableExercise -> {
+                state = state.copy(
+                    trackableExercise = state.trackableExercise.map {
+                        if(it.exercise.id == event.exercise.exercise.id){
+                            it.copy(isExpanded = !it.isExpanded)
+                        } else it
+                    }
+                )
             }
         }
     }

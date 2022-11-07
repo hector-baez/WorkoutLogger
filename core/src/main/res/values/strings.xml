@@ -68,4 +68,8 @@
     <string name="add_exercise">Add Exercise</string>
     <string name="search_exercise">Search Exercise</string>
     <string name="empty_results">Your search returned no results.</string>
+    <string name="exercise_descr">Description:</string>
+    <string name="exercise_muscle">Muscles:</string>
+    <string name="exercise_muscle_secondary">Secondary Muscles:</string>
+    <string name="exercise_demonstration">Demonstration:</string>
 </resources>
