@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,13 +51,18 @@ fun OptionsHeader(
             )
     ) {
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
-        AddButton(text = "Start Workout", onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth())
+        AddButton(text = "Start Workout", onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), icon = Icons.Default.Build)
         Spacer(modifier = Modifier.height(spacing.spaceLarge))
-        AddButton(text = "Create Workout", onClick = {
-                                                     onNavigateToCreate(
+        AddButton(
+            text = "Create Workout",
+            onClick = {
+                onNavigateToCreate(
 
-                                                     )
-                                                     }, modifier = Modifier.fillMaxWidth())
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            icon = Icons.Default.Create
+        )
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
     }
 }

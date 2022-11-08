@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hbaez.core_ui.LocalSpacing
@@ -24,7 +25,8 @@ fun AddButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colors.onPrimary
+    color: Color = MaterialTheme.colors.onPrimary,
+    icon: ImageVector
 ) {
     val spacing = LocalSpacing.current
     Row(
@@ -41,7 +43,7 @@ fun AddButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = Icons.Default.Add,
+            imageVector = icon,
             contentDescription = stringResource(id = R.string.add),
             tint = color
         )
