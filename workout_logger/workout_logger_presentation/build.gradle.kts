@@ -8,8 +8,5 @@ dependencies {
     "implementation"(project(Modules.workoutLoggerDomain))
 
     "implementation"(Coil.coilCompose)
-
-//    "implementation" ("androidx.lifecycle:lifecycle-viewmodel:2.5.1")
-//    "implementation" ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-
+    "implementation"(Coil.coilSvg)
 }

@@ -89,7 +89,9 @@ fun SearchExerciseScreen(
                     keyboardController?.hide()
                     viewModel.onEvent(SearchExerciseEvent.OnSearch)
                            },
-                onFocusChanged = { /*TODO*/}
+                onFocusChanged = {
+                    viewModel.onEvent(SearchExerciseEvent.OnExerciseNameFocusChange(it.isFocused))
+                }
             )
             Box(
                 modifier = Modifier
@@ -119,6 +121,9 @@ fun SearchExerciseScreen(
                     trackableExerciseState = it,
                     onClick = {
                               viewModel.onEvent(SearchExerciseEvent.OnToggleTrackableExercise(it))
+                    },
+                    onDescrClick = {
+                                   viewModel.onEvent(SearchExerciseEvent.OnToggleTrackableExerciseDescription(it))
                     },
                     onTrack = {
                               /*TODO*/

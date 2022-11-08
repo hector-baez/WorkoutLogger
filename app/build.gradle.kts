@@ -71,6 +71,7 @@ dependencies {
     implementation(AndroidX.appCompat)
 
     implementation(Coil.coilCompose)
+    implementation(Coil.coilSvg)
 
     implementation(Google.material)
 

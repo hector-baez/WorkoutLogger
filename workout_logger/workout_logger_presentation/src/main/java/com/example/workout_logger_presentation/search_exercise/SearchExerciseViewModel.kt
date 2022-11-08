@@ -41,7 +41,9 @@ class SearchExerciseViewModel @Inject constructor(
             }
 
             is SearchExerciseEvent.OnExerciseNameFocusChange -> {
-                /*TODO*/
+                state = state.copy(
+                    isHintVisible = !event.isFocused && state.query.isBlank()
+                )
             }
 
             is SearchExerciseEvent.OnSearch -> {
@@ -53,6 +55,16 @@ class SearchExerciseViewModel @Inject constructor(
                     trackableExercise = state.trackableExercise.map {
                         if(it.exercise.id == event.exercise.exercise.id){
                             it.copy(isExpanded = !it.isExpanded)
+                        } else it
+                    }
+                )
+            }
+
+            is SearchExerciseEvent.OnToggleTrackableExerciseDescription -> {
+                state = state.copy(
+                    trackableExercise = state.trackableExercise.map {
+                        if(it.exercise.id == event.exercise.exercise.id){
+                            it.copy(isDescrExpanded = !it.isDescrExpanded)
                         } else it
                     }
                 )
