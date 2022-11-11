@@ -51,35 +51,16 @@ fun CreateWorkoutScreen(
         topBar = {
             Column {
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
-                Row{
-                    NameField(
-                        text = state.workoutName,
-                        hint = stringResource(id = R.string.workout_name),
-                        modifier = Modifier.padding(end = spacing.spaceMedium),
-                        onValueChange = {
-                            viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameChange(it))
-                        },
-                        onFocusChanged = {
-                            viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameFocusChange(it.isFocused))
-                        }
-                    )
-                    Box(
-                        modifier = Modifier
-                            .clip(RectangleShape)
-                            .align(Alignment.CenterVertically)
-                            .clickable {
-                                onNavigateToSearchExercise()
-                            }
-                    ){
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                        )
+                NameField(
+                    text = state.workoutName,
+                    hint = stringResource(id = R.string.workout_name),
+                    onValueChange = {
+                        viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameChange(it))
+                    },
+                    onFocusChanged = {
+                        viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameFocusChange(it.isFocused))
                     }
-                }
-
+                )
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
                 CreateWorkoutTableHeader()
             }
@@ -101,6 +82,7 @@ fun CreateWorkoutScreen(
                             rest = it.rest,
                             weight = it.weight,
                             isRevealed = it.isRevealed,
+                            isSearchRevealed = it.isSearchRevealed,
                             id = it.id,
                             cardOffset = 400f,
                             onExpand = { id ->
@@ -108,6 +90,9 @@ fun CreateWorkoutScreen(
                             },
                             onCollapse = { id ->
                                 viewModel.onEvent(CreateWorkoutEvent.OnDraggableRowCollapse(id))
+                            },
+                            onCenter = {id ->
+                                viewModel.onEvent(CreateWorkoutEvent.OnDraggableRowCenter(id))
                             },
                             onNameChange = { newText ->
                                 viewModel.onEvent(
@@ -151,6 +136,9 @@ fun CreateWorkoutScreen(
                             },
                             onDeleteClick = {
                                 viewModel.onEvent(CreateWorkoutEvent.OnRemoveTableRow(it.id))
+                            },
+                            onSearchClick = {
+                                onNavigateToSearchExercise()
                             }
                         )
                         Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))

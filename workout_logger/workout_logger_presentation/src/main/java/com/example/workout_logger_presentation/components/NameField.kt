@@ -60,7 +60,7 @@ fun NameField(
                 .background(MaterialTheme.colors.background)
                 .width(IntrinsicSize.Max)
                 .padding(spacing.spaceMedium)
-                .padding(end = spacing.spaceSmall)
+                .padding(end = spacing.spaceExtraLarge)
                 .onFocusChanged { onFocusChanged(it) }
                 .testTag("workoutname_textfield")
         )
@@ -75,14 +75,5 @@ fun NameField(
                     .padding(start = spacing.spaceMedium)
             )
         }
-//        IconButton(
-//            onClick = onSearch,
-//            modifier = Modifier.align(Alignment.CenterEnd)
-//        ) {
-//            Icon(
-//                imageVector = Icons.Default.Search,
-//                contentDescription = stringResource(id = R.string.search)
-//            )
-//        }
     }
 }

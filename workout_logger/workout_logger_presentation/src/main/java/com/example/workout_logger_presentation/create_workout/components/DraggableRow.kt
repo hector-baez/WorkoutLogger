@@ -17,9 +17,11 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +34,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import com.example.workout_logger_presentation.create_workout.TrackableExerciseUiState
@@ -41,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.consumeDownChange
@@ -52,6 +56,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workout_logger_presentation.create_workout.CreateWorkoutEvent
 import com.example.workout_logger_presentation.create_workout.CreateWorkoutTableRow
 import com.example.workout_logger_presentation.create_workout.CreateWorkoutViewModel
+import com.hbaez.core_ui.LocalSpacing
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
@@ -67,17 +72,21 @@ fun DraggableRow(
     rest: String,
     weight: String,
     isRevealed: Boolean,
+    isSearchRevealed: Boolean,
     id: Int,
     cardOffset: Float,
     onExpand: (Int) -> Unit,
     onCollapse: (Int) -> Unit,
+    onCenter: (Int) -> Unit,
     onNameChange: (String) -> Unit,
     onSetsChange: (String) -> Unit,
     onRepsChange: (String) -> Unit,
     onRestChange: (String) -> Unit,
     onWeightChange: (String) -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onSearchClick: () -> Unit
 ){
+    val spacing = LocalSpacing.current
     val offsetX = remember { mutableStateOf(0f) }
     val transitionState = remember {
         MutableTransitionState(isRevealed).apply {
@@ -88,7 +97,11 @@ fun DraggableRow(
     val offsetTransition by transition.animateFloat(
         label = "rowOffsetTransition",
         transitionSpec = { tween(durationMillis = ANIMATION_DURATION) },
-        targetValueByState = { if (isRevealed) (cardOffset - offsetX.value) else 0f },
+        targetValueByState = {
+            if (isRevealed and !isSearchRevealed) (cardOffset - offsetX.value)
+            else if (isRevealed and isSearchRevealed) (-cardOffset - offsetX.value)
+            else -offsetX.value
+                             },
     )
 
 
@@ -99,20 +112,46 @@ fun DraggableRow(
             .border(BorderStroke(1.dp, MaterialTheme.colors.onBackground))
             .padding(8.dp)
     ){
-        Box(modifier = Modifier
-            .width(150.dp)
-            .fillMaxHeight()
-            .clip(RectangleShape)
-            .background(MaterialTheme.colors.error)
-            .clickable {
-                onDeleteClick()
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+                .padding(start=5.dp, end=5.dp)
+        ) {
+            Box(modifier = Modifier
+                .width(150.dp)
+                .fillMaxHeight()
+                .clip(RectangleShape)
+                .background(MaterialTheme.colors.primaryVariant)
+                .clickable {
+                    onDeleteClick()
+                }
+            ){
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.Center)
+                )
             }
-        ){
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = null,
-                modifier = Modifier.fillMaxHeight().align(Alignment.Center)
-            )
+            Spacer(modifier = Modifier.width(IntrinsicSize.Max))
+            Box(modifier = Modifier
+                .width(150.dp)
+                .fillMaxHeight()
+                .clip(RectangleShape)
+                .background(Color(0xFF4C62F5))
+                .clickable {
+                    onSearchClick()
+                }
+            ){
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.Center)
+                )
+            }
         }
 
         Row(
@@ -120,16 +159,18 @@ fun DraggableRow(
                 .offset { IntOffset((offsetX.value.roundToInt() + offsetTransition).toInt(), 0) }
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures { change, dragAmount ->
-                        Log.println(Log.DEBUG, "dragAmount", dragAmount.toString())
                         val original = Offset(offsetX.value, 0f)
                         val summed = original + Offset(x = dragAmount, y = 0f)
-                        val newValue = Offset(x = summed.x.coerceIn(0f, cardOffset), y = 0f)
-                        when {
-                            dragAmount > 10f -> onExpand(id)
-                            dragAmount < -10f -> onCollapse(id)
-                        }
+                        val newValue = Offset(x = summed.x.coerceIn(-cardOffset, cardOffset), y = 0f)
                         change.consumePositionChange()
                         offsetX.value = newValue.x
+                        Log.println(Log.DEBUG, "dragamnt,offsetX.value", dragAmount.toString() + " , " + offsetX.value.toString())
+                        when {
+                            dragAmount > 10f && offsetX.value in cardOffset*0.5f..cardOffset -> onExpand(id)
+                            dragAmount > 10f && offsetX.value in -cardOffset..0f -> onCenter(id)
+                            dragAmount < -10f && offsetX.value in -cardOffset..-cardOffset*0.5f -> onCollapse(id)
+                            dragAmount < -10f && offsetX.value in 0f..cardOffset -> onCenter(id)
+                        }
                     }
                 }
                 .height(IntrinsicSize.Min)
@@ -146,9 +187,15 @@ fun DraggableRow(
                 reps = reps,
                 rest = rest,
                 weight = weight,
-                isRevealed = isRevealed
+                isRevealed = isRevealed || isSearchRevealed
             )
         }
     }
 
+}
+
+enum class RowState {
+    Right,
+    Left,
+    Center
 }

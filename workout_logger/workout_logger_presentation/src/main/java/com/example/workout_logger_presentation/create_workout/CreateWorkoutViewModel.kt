@@ -88,29 +88,40 @@ class CreateWorkoutViewModel @Inject constructor(
             }
 
             is CreateWorkoutEvent.OnDraggableRowExpand -> {
-                Log.println(Log.DEBUG, "!!!!!!!!!!!!!!!!!!id", event.id.toString())
+                Log.println(Log.DEBUG, "onExpand", event.id.toString())
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if(it.id == event.id) {
-                            it.copy(isRevealed = true)
+                            it.copy(isRevealed = true, isSearchRevealed = false)
                         } else it
                     }.toMutableList()
                 )
             }
 
             is CreateWorkoutEvent.OnDraggableRowCollapse -> {
-                Log.println(Log.DEBUG, "!!!!!!!!!!!!!!!!!!id", event.id.toString())
+                Log.println(Log.DEBUG, "onCollapse", event.id.toString())
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if(it.id == event.id){
-                            it.copy(isRevealed = false)
+                            it.copy(isRevealed = true, isSearchRevealed = true)
+                        } else it
+                    }.toMutableList()
+                )
+            }
+
+            is CreateWorkoutEvent.OnDraggableRowCenter -> {
+                Log.println(Log.DEBUG, "onCenter", event.id.toString())
+                state = state.copy(
+                    trackableExercises = state.trackableExercises.toList().map {
+                        if(it.id == event.id){
+                            it.copy(isRevealed = false, isSearchRevealed = false)
                         } else it
                     }.toMutableList()
                 )
             }
 
             is CreateWorkoutEvent.OnRemoveTableRow -> {
-                Log.println(Log.DEBUG, "!!!!!!!!!!!!!!!!!!id", event.id.toString())
+                Log.println(Log.DEBUG, "onRemove", event.id.toString())
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if(it.id == event.id){
