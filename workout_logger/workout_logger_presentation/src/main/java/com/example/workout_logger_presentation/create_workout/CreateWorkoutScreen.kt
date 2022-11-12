@@ -167,6 +167,7 @@ fun CreateWorkoutScreen(
         },
         bottomBar = {
             Row(
+                Modifier.padding(spacing.spaceSmall)
             ){
                 AddButton(
                     text = stringResource(id = R.string.submit),

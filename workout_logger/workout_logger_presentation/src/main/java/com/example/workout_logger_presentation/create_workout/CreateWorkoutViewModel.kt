@@ -31,7 +31,11 @@ class CreateWorkoutViewModel @Inject constructor(
                 addExercise()
             }
             is CreateWorkoutEvent.OnWorkoutNameChange -> {
-                state = state.copy(workoutName = event.name)
+                state = state.copy(
+                    workoutName = if(event.name.trim().isNotEmpty() || event.name.isEmpty()){
+                        event.name
+                    } else state.workoutName
+                )
             }
 
             is CreateWorkoutEvent.OnWorkoutNameFocusChange -> {
@@ -44,7 +48,9 @@ class CreateWorkoutViewModel @Inject constructor(
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if (it.id == event.trackableExerciseUiState.id) {
-                            it.copy(name = event.name)
+                            if(event.name.trim().isNotEmpty() || event.name.isEmpty()){
+                                it.copy(name = event.name)
+                            } else it
                         } else it
                     }.toMutableList()
                 )
@@ -54,7 +60,9 @@ class CreateWorkoutViewModel @Inject constructor(
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if (it.id == event.trackableExerciseUiState.id) {
-                            it.copy(sets = event.sets)
+                            if(event.sets.toIntOrNull() != 0 || event.sets.isEmpty()){
+                                it.copy(sets = event.sets)
+                            } else it.copy(sets = "")
                         } else it
                     }.toMutableList()
                 )
@@ -64,7 +72,9 @@ class CreateWorkoutViewModel @Inject constructor(
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if (it.id == event.trackableExerciseUiState.id) {
-                            it.copy(reps = event.reps)
+                            if(event.reps.toIntOrNull() != 0 || event.reps.isEmpty()){
+                                it.copy(reps = event.reps)
+                            } else it.copy(reps = "")
                         } else it
                     }.toMutableList()
                 )
@@ -74,7 +84,9 @@ class CreateWorkoutViewModel @Inject constructor(
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if (it.id == event.trackableExerciseUiState.id) {
-                            it.copy(rest = event.rest)
+                            if(event.rest.toIntOrNull() != 0 || event.rest.isEmpty()){
+                                it.copy(rest = event.rest)
+                            } else it.copy(rest = "")
                         } else it
                     }.toMutableList()
                 )
@@ -84,7 +96,9 @@ class CreateWorkoutViewModel @Inject constructor(
                 state = state.copy(
                     trackableExercises = state.trackableExercises.toList().map {
                         if (it.id == event.trackableExerciseUiState.id) {
-                            it.copy(weight = event.weight)
+                            if(event.weight.toIntOrNull() != 0 || event.weight.isEmpty()){
+                                it.copy(weight = event.weight)
+                            } else it.copy(weight = "")
                         } else it
                     }.toMutableList()
                 )
