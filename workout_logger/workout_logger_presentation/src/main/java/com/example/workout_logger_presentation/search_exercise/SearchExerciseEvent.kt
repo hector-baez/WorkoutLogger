@@ -11,4 +11,6 @@ sealed class SearchExerciseEvent {
     data class OnToggleTrackableExercise(val exercise: TrackableExerciseState): SearchExerciseEvent()
 
     data class OnToggleTrackableExerciseDescription(val exercise: TrackableExerciseState): SearchExerciseEvent()
+
+    data class OnTrackExercise(val exercise: TrackableExerciseState, val rowId: Int): SearchExerciseEvent()
 }

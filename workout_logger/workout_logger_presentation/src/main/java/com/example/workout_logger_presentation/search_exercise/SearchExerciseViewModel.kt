@@ -11,6 +11,8 @@ import com.example.workout_logger_presentation.create_workout.TrackableExerciseU
 import com.hbaez.core.util.UiEvent
 import com.hbaez.core.util.UiText
 import com.hbaez.core.R
+import com.hbaez.core.domain.model.TrackedExercise
+import com.hbaez.core.domain.preferences.Preferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -22,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchExerciseViewModel @Inject constructor(
+    private val preferences: Preferences,
     private val searchExerciseUseCases: ExerciseTrackerUseCases
 ): ViewModel() {
     var state by mutableStateOf(SearchExerciseState())
@@ -69,6 +72,10 @@ class SearchExerciseViewModel @Inject constructor(
                     }
                 )
             }
+
+            is SearchExerciseEvent.OnTrackExercise -> {
+                trackExercise(event.exercise, event.rowId)
+            }
         }
     }
 
@@ -96,5 +103,44 @@ class SearchExerciseViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
+    }
+
+    private fun trackExercise(exercise: TrackableExerciseState, rowId: Int){
+        viewModelScope.launch {
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.id.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.name!!)
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.exerciseBase.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.description.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscles.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscles_secondary.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.equipment.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.image_url.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.is_main.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.is_front.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscle_name_main.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.image_url_main.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.image_url_secondary.toString())
+            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscle_name_secondary.toString())
+            preferences.newTrackedExercise(
+                TrackedExercise(
+                    rowId = rowId,
+                    id = exercise.exercise.id,
+                    name = exercise.exercise.name!!,
+                    exerciseBase = exercise.exercise.exerciseBase!!,
+                    description = exercise.exercise.description,
+                    muscles = exercise.exercise.muscles,
+                    muscles_secondary = exercise.exercise.muscles_secondary,
+                    equipment = exercise.exercise.equipment,
+                    image_url = exercise.exercise.image_url.toSet(),
+                    is_main = exercise.exercise.is_main,
+                    is_front = exercise.exercise.is_front,
+                    muscle_name_main = exercise.exercise.muscle_name_main,
+                    image_url_main = exercise.exercise.image_url_main.toSet(),
+                    image_url_secondary = exercise.exercise.image_url_secondary.toSet(),
+                    muscle_name_secondary = exercise.exercise.muscle_name_secondary
+                )
+            )
+            _uiEvent.send(UiEvent.NavigateUp)
+        }
     }
 }

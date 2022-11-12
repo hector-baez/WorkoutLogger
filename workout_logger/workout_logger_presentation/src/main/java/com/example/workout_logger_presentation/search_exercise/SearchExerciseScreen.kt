@@ -37,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
+import com.example.workout_logger_domain.model.TrackedExercise
 import com.example.workout_logger_presentation.components.SearchTextField
 import com.example.workout_logger_presentation.search_exercise.components.TrackableExerciseItem
 import com.hbaez.core.util.UiEvent
@@ -47,6 +48,7 @@ import com.hbaez.core.util.UiEvent
 fun SearchExerciseScreen(
     scaffoldState: ScaffoldState,
     onNavigateUp: () -> Unit,
+    rowId: Int,
     viewModel: SearchExerciseViewModel  = hiltViewModel()
 ){
     val spacing = LocalSpacing.current
@@ -126,7 +128,7 @@ fun SearchExerciseScreen(
                                    viewModel.onEvent(SearchExerciseEvent.OnToggleTrackableExerciseDescription(it))
                     },
                     onTrack = {
-                              /*TODO*/
+                              viewModel.onEvent(SearchExerciseEvent.OnTrackExercise(it, rowId))
                     },
                 )
             }

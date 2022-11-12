@@ -1,5 +1,7 @@
 package com.example.workout_logger_presentation.create_workout
 
+import com.example.workout_logger_presentation.search_exercise.SearchExerciseEvent
+
 sealed class CreateWorkoutEvent {
 
     object OnAddExercise: CreateWorkoutEvent()
@@ -25,5 +27,7 @@ sealed class CreateWorkoutEvent {
     data class OnDraggableRowCenter(val id: Int): CreateWorkoutEvent()
 
     data class OnRemoveTableRow(val id: Int): CreateWorkoutEvent()
+
+    object CheckTrackedExercise: CreateWorkoutEvent()
 
 }

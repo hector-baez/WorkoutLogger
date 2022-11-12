@@ -73,6 +73,7 @@ fun DraggableRow(
     weight: String,
     isRevealed: Boolean,
     isSearchRevealed: Boolean,
+    hasExercise: Boolean,
     id: Int,
     cardOffset: Float,
     onExpand: (Int) -> Unit,
@@ -187,15 +188,10 @@ fun DraggableRow(
                 reps = reps,
                 rest = rest,
                 weight = weight,
-                isRevealed = isRevealed || isSearchRevealed
+                isRevealed = isRevealed || isSearchRevealed,
+                hasExercise = hasExercise
             )
         }
     }
 
-}
-
-enum class RowState {
-    Right,
-    Left,
-    Center
 }

@@ -34,18 +34,24 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import com.example.workout_logger_presentation.search_exercise.SearchExerciseEvent
 
 @ExperimentalCoilApi
 @Composable
 fun CreateWorkoutScreen(
-    onNavigateToSearchExercise: () -> Unit,
+    onNavigateToSearchExercise: (rowId: Int) -> Unit,
     viewModel: CreateWorkoutViewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
     val state = viewModel.state
 
     val context = LocalContext.current
+
+    LaunchedEffect(Unit){
+        viewModel.onEvent(CreateWorkoutEvent.CheckTrackedExercise)
+    }
 
     Scaffold(
         topBar = {
@@ -83,6 +89,7 @@ fun CreateWorkoutScreen(
                             weight = it.weight,
                             isRevealed = it.isRevealed,
                             isSearchRevealed = it.isSearchRevealed,
+                            hasExercise = (it.exercise != null),
                             id = it.id,
                             cardOffset = 400f,
                             onExpand = { id ->
@@ -138,7 +145,7 @@ fun CreateWorkoutScreen(
                                 viewModel.onEvent(CreateWorkoutEvent.OnRemoveTableRow(it.id))
                             },
                             onSearchClick = {
-                                onNavigateToSearchExercise()
+                                onNavigateToSearchExercise(it.id)
                             }
                         )
                         Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))

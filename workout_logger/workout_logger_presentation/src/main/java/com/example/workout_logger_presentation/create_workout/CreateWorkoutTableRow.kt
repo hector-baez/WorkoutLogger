@@ -28,7 +28,8 @@ fun CreateWorkoutTableRow(
     reps: String,
     rest: String,
     weight: String,
-    isRevealed: Boolean
+    isRevealed: Boolean,
+    hasExercise: Boolean
 ){
     val spacing = LocalSpacing.current
 
@@ -38,6 +39,7 @@ fun CreateWorkoutTableRow(
     ){
         EditTableCell(
             isRevealed = isRevealed,
+            hasExercise = hasExercise,
             text = name,
             weight = .32f,
             keyboardType = KeyboardType.Text,
@@ -89,6 +91,7 @@ fun CreateWorkoutTableRow(
 @Composable
 fun RowScope.EditTableCell(
     isRevealed: Boolean,
+    hasExercise: Boolean = false,
     text: String,
     weight: Float,
     keyboardType: KeyboardType,
@@ -104,6 +107,6 @@ fun RowScope.EditTableCell(
             .weight(weight)
             .fillMaxWidth(),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-        enabled = !isRevealed
+        enabled = !isRevealed && !hasExercise
     )
 }

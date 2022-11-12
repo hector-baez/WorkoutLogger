@@ -5,14 +5,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.workout_logger_domain.model.TrackedExercise
 import com.hbaez.core.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import com.hbaez.core.domain.preferences.Preferences
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateWorkoutViewModel @Inject constructor(
+    val preferences: Preferences
 //    private val createWorkoutUseCases: CreateWorkoutUseCases
 ): ViewModel() {
 
@@ -130,6 +133,39 @@ class CreateWorkoutViewModel @Inject constructor(
                     }.toMutableList()
                 )
 
+            }
+
+            is CreateWorkoutEvent.CheckTrackedExercise -> {
+                val trackedExercise = preferences.loadTrackedExercise()
+                Log.println(Log.DEBUG, "create workout init", trackedExercise.name)
+                if (trackedExercise.rowId != -1){
+                    state = state.copy(
+                        trackableExercises = state.trackableExercises.toList().map {
+                            if(it.id == trackedExercise.rowId){
+                                it.copy(
+                                    name = trackedExercise.name,
+                                    exercise = TrackedExercise(
+                                        id = trackedExercise.id,
+                                        name = trackedExercise.name,
+                                        exerciseBase = trackedExercise.exerciseBase,
+                                        description = trackedExercise.description,
+                                        muscles = trackedExercise.muscles,
+                                        muscles_secondary = trackedExercise.muscles_secondary,
+                                        equipment = trackedExercise.equipment,
+                                        image_url = trackedExercise.image_url.toList(),
+                                        is_main = trackedExercise.is_main,
+                                        is_front = trackedExercise.is_front,
+                                        muscle_name_main = trackedExercise.muscle_name_main,
+                                        image_url_main = trackedExercise.image_url_main.toList(),
+                                        image_url_secondary = trackedExercise.image_url_secondary.toList(),
+                                        muscle_name_secondary = trackedExercise.muscle_name_secondary
+                                    )
+                                )
+                            } else it
+                        }.toMutableList()
+                    )
+                    preferences.removeTrackedExercise()
+                }
             }
         }
     }

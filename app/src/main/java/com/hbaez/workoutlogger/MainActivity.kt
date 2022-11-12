@@ -124,15 +124,24 @@ class MainActivity : ComponentActivity() {
 
                         composable(Route.WORKOUT_CREATE) {
                             CreateWorkoutScreen(
-                                onNavigateToSearchExercise = {
-                                    navController.navigate(Route.WORKOUT_SEARCH)
+                                onNavigateToSearchExercise = { rowId ->
+                                    navController.navigate(Route.WORKOUT_SEARCH + "/$rowId")
                                 }
                             )
                         }
 
-                        composable(Route.WORKOUT_SEARCH) {
+                        composable(
+                            route = Route.WORKOUT_SEARCH + "/{rowId}",
+                            arguments = listOf(
+                                navArgument("rowId"){
+                                    type = NavType.IntType
+                                }
+                            )
+                        ) {
+                            val rowId = it.arguments?.getInt("rowId") ?: 0
                             SearchExerciseScreen(
                                 scaffoldState = scaffoldState,
+                                rowId = rowId,
                                 onNavigateUp = {
                                     navController.navigateUp()
                                 }
