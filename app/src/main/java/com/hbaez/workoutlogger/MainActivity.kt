@@ -124,8 +124,12 @@ class MainActivity : ComponentActivity() {
 
                         composable(Route.WORKOUT_CREATE) {
                             CreateWorkoutScreen(
+                                scaffoldState = scaffoldState,
                                 onNavigateToSearchExercise = { rowId ->
                                     navController.navigate(Route.WORKOUT_SEARCH + "/$rowId")
+                                },
+                                onNavigateUp = {
+                                    navController.navigateUp()
                                 }
                             )
                         }

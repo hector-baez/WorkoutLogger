@@ -5,18 +5,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.workout_logger_domain.model.TrackedExercise
+import com.example.workout_logger_domain.use_case.CreateWorkoutUseCases
 import com.hbaez.core.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import com.hbaez.core.domain.preferences.Preferences
+import com.hbaez.core.util.UiText
+import com.hbaez.workout_logger_presentation.R
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateWorkoutViewModel @Inject constructor(
-    val preferences: Preferences
-//    private val createWorkoutUseCases: CreateWorkoutUseCases
+    val preferences: Preferences,
+    private val createWorkoutUseCases: CreateWorkoutUseCases
 ): ViewModel() {
 
     var state by mutableStateOf(CreateWorkoutState())
@@ -181,6 +186,49 @@ class CreateWorkoutViewModel @Inject constructor(
                     preferences.removeTrackedExercise()
                 }
             }
+
+            is CreateWorkoutEvent.OnCreateWorkout -> {
+                run breaking@{
+                    if(event.workoutName.isEmpty()){
+                        viewModelScope.launch {
+                            _uiEvent.send(
+                                UiEvent.ShowSnackbar(
+                                    UiText.StringResource(R.string.error_incomplete_table)
+                                )
+                            )
+                        }
+                        return@breaking
+                    }
+                    var counter = 0
+                    event.trackableExercise.forEach { exercise ->
+                        if(!exercise.isDeleted){
+                            counter += 1
+                            if(exercise.name.isEmpty() || exercise.sets.isEmpty() || exercise.reps.isEmpty() || exercise.rest.isEmpty() || exercise.weight.isEmpty()){
+                                Log.println(Log.DEBUG, "exercise sets", "reached inside if")
+                                viewModelScope.launch {
+                                    _uiEvent.send(
+                                        UiEvent.ShowSnackbar(
+                                            UiText.StringResource(R.string.error_incomplete_table)
+                                        )
+                                    )
+                                }
+                                return@breaking
+                            }
+                        }
+                    }
+                    if(counter == 0) {
+                        viewModelScope.launch {
+                            _uiEvent.send(
+                                UiEvent.ShowSnackbar(
+                                    UiText.StringResource(R.string.error_no_rows)
+                                )
+                            )
+                        }
+                        return@breaking
+                    }
+                    trackWorkout(event)
+                }
+            }
         }
     }
 
@@ -189,5 +237,25 @@ class CreateWorkoutViewModel @Inject constructor(
             trackableExercises = (state.trackableExercises.toList() + TrackableExerciseUiState(id = state.lastUsedId + 1, exercise = null)).toMutableList(),
             lastUsedId = state.lastUsedId + 1
         )
+    }
+
+    private fun trackWorkout(event: CreateWorkoutEvent.OnCreateWorkout){
+        viewModelScope.launch {
+            event.trackableExercise.forEach {
+                if(it.isDeleted) return@forEach
+                createWorkoutUseCases.addWorkout(
+                    workoutName = event.workoutName,
+                    exerciseName = it.name,
+                    exerciseId = it.id,
+                    sets = it.sets.toInt(),
+                    rest = it.rest.toInt(),
+                    reps = it.reps.toInt(),
+                    weight = it.weight.toInt(),
+                    rowId = it.id,
+                    lastUsedId = event.lastUsedId
+                )
+            }
+            _uiEvent.send(UiEvent.NavigateUp)
+        }
     }
 }

@@ -73,4 +73,6 @@
     <string name="exercise_muscle_secondary">Secondary Muscles:</string>
     <string name="exercise_demonstration">Demonstration:</string>
     <string name="submit">Submit</string>
+    <string name="error_incomplete_table">There are missing fields.</string>
+    <string name="error_no_rows">Workout must have at least one exercise.</string>
 </resources>

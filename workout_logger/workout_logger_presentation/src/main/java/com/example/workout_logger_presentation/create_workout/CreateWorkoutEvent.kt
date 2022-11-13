@@ -30,4 +30,6 @@ sealed class CreateWorkoutEvent {
 
     object CheckTrackedExercise: CreateWorkoutEvent()
 
+    data class OnCreateWorkout(val trackableExercise: List<TrackableExerciseUiState>, val workoutName: String, val lastUsedId: Int): CreateWorkoutEvent()
+
 }

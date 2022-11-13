@@ -2,7 +2,9 @@ package com.example.workout_logger_data.repository
 
 import com.example.workout_logger_data.local.ExerciseDao
 import com.example.workout_logger_data.mapper.toTrackedExercise
+import com.example.workout_logger_data.mapper.toWorkoutEntity
 import com.example.workout_logger_domain.model.TrackedExercise
+import com.example.workout_logger_domain.model.TrackedWorkout
 import com.example.workout_logger_domain.repository.ExerciseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,5 +18,9 @@ class ExerciseRepositoryImpl(
             entities.map { it.toTrackedExercise() }
 
         }
+    }
+
+    override suspend fun insertTrackedWorkout(trackedWorkout: TrackedWorkout) {
+        dao.insertWorkout(trackedWorkout.toWorkoutEntity())
     }
 }

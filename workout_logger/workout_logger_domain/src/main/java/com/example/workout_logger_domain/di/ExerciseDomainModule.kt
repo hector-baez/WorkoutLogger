@@ -1,6 +1,8 @@
 package com.example.workout_logger_domain.di
 
 import com.example.workout_logger_domain.repository.ExerciseRepository
+import com.example.workout_logger_domain.use_case.AddWorkout
+import com.example.workout_logger_domain.use_case.CreateWorkoutUseCases
 import com.example.workout_logger_domain.use_case.ExerciseTrackerUseCases
 import com.example.workout_logger_domain.use_case.GetExerciseForName
 import dagger.Module
@@ -21,6 +23,16 @@ object ExerciseDomainModule {
     ): ExerciseTrackerUseCases {
         return ExerciseTrackerUseCases(
             getExerciseForName = GetExerciseForName(repository)
+        )
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideCreateWorkoutUseCases(
+        repository: ExerciseRepository
+    ): CreateWorkoutUseCases {
+        return CreateWorkoutUseCases(
+            addWorkout = AddWorkout(repository)
         )
     }
 }

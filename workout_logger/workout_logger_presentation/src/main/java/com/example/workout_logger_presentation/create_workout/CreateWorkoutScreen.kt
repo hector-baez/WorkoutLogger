@@ -29,6 +29,7 @@ import com.hbaez.workout_logger_presentation.R
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
@@ -37,10 +38,14 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import com.example.workout_logger_presentation.search_exercise.SearchExerciseEvent
+import com.hbaez.core.util.UiEvent
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoilApi
 @Composable
 fun CreateWorkoutScreen(
+    scaffoldState: ScaffoldState,
+    onNavigateUp: () -> Unit,
     onNavigateToSearchExercise: (rowId: Int) -> Unit,
     viewModel: CreateWorkoutViewModel = hiltViewModel()
 ) {
@@ -51,6 +56,18 @@ fun CreateWorkoutScreen(
 
     LaunchedEffect(Unit){
         viewModel.onEvent(CreateWorkoutEvent.CheckTrackedExercise)
+
+        viewModel.uiEvent.collect{ event ->
+            when(event) {
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message.asString(context)
+                    )
+                }
+                is UiEvent.NavigateUp -> onNavigateUp()
+                else -> Unit
+            }
+        }
     }
 
     Scaffold(
@@ -176,7 +193,7 @@ fun CreateWorkoutScreen(
                         .wrapContentHeight()
                         .padding(start = spacing.spaceExtraExtraLarge, end = spacing.spaceSmall),
                     onClick = {
-                        viewModel.onEvent(CreateWorkoutEvent.OnAddExercise)
+                        viewModel.onEvent(CreateWorkoutEvent.OnCreateWorkout(state.trackableExercises.toList(), state.workoutName, state.lastUsedId))
                     },
                     icon = Icons.Default.Done
                 )
