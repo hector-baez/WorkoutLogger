@@ -15,6 +15,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +31,7 @@ class WorkoutLoggerOverviewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private var getWorkoutsForDateJob: Job? = null
+    private var getWorkoutNames: Job? = null
 
     init {
         refreshWorkouts()
@@ -45,6 +47,21 @@ class WorkoutLoggerOverviewModel @Inject constructor(
                 state = state.copy(
                     date = state.date.minusDays(1)
                 )
+            }
+            is WorkoutLoggerOverviewEvent.OnStartWorkoutClick -> {
+                getWorkoutNames?.cancel()
+                val workoutNames = mutableListOf<String>()
+                getWorkoutNames = exerciseTrackerUseCases.getWorkouts().onEach {
+                    it.onEach { trackedWorkout ->
+                        state = state.copy(
+                            workoutNames = (workoutNames + trackedWorkout.name).toMutableList()
+                        )
+                        workoutNames.add(trackedWorkout.name)
+                    }
+                }.launchIn(viewModelScope)
+            }
+            is WorkoutLoggerOverviewEvent.OnChooseWorkout -> {
+                
             }
         }
     }

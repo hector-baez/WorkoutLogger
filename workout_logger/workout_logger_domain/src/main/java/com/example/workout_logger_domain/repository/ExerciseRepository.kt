@@ -8,4 +8,6 @@ interface ExerciseRepository {
     fun getExercisesForName(name: String): Flow<List<TrackedExercise>>
 
     suspend fun insertTrackedWorkout(trackedWorkout: TrackedWorkout)
+
+    fun getWorkouts(): Flow<List<TrackedWorkout>>
 }

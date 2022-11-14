@@ -24,4 +24,13 @@ interface ExerciseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWorkout(workoutEntity: WorkoutEntity)
+
+    @Query(
+        """
+            SELECT DISTINCT name, *
+            FROM workoutentity
+            GROUP BY name
+        """
+    )
+    fun getWorkouts(): Flow<List<WorkoutEntity>>
 }
