@@ -6,6 +6,7 @@ import com.example.workout_logger_domain.use_case.CreateWorkoutUseCases
 import com.example.workout_logger_domain.use_case.ExerciseTrackerUseCases
 import com.example.workout_logger_domain.use_case.GetExerciseForName
 import com.example.workout_logger_domain.use_case.GetWorkouts
+import com.example.workout_logger_domain.use_case.GetWorkoutsByName
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,8 @@ object ExerciseDomainModule {
     ): ExerciseTrackerUseCases {
         return ExerciseTrackerUseCases(
             getExerciseForName = GetExerciseForName(repository),
-            getWorkouts = GetWorkouts(repository)
+            getWorkouts = GetWorkouts(repository),
+            getWorkoutsByName = GetWorkoutsByName(repository)
         )
     }
 

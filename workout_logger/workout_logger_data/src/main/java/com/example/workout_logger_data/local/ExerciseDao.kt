@@ -33,4 +33,13 @@ interface ExerciseDao {
         """
     )
     fun getWorkouts(): Flow<List<WorkoutEntity>>
+
+    @Query(
+        """
+            SELECT *
+            FROM workoutentity
+            WHERE name = :workoutName
+        """
+    )
+    fun getWorkoutsByName(workoutName: String): Flow<List<WorkoutEntity>>
 }

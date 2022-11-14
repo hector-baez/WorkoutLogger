@@ -9,4 +9,5 @@ dependencies {
 
     "implementation"(Coil.coilCompose)
     "implementation"(Coil.coilSvg)
+    "implementation" ("com.google.accompanist:accompanist-pager:0.23.1")
 }

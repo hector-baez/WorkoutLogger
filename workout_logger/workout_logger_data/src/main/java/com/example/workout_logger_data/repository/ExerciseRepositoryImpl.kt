@@ -32,4 +32,12 @@ class ExerciseRepositoryImpl(
             }
         }
     }
+
+    override fun getWorkoutsByName(workoutName: String): Flow<List<TrackedWorkout>> {
+        return dao.getWorkoutsByName(workoutName).map { entities ->
+            entities.map {
+                it.toTrackedWorkout()
+            }
+        }
+    }
 }

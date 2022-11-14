@@ -16,6 +16,7 @@ import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
 import com.example.workout_logger_presentation.create_workout.CreateWorkoutScreen
 import com.example.workout_logger_presentation.search_exercise.SearchExerciseScreen
+import com.example.workout_logger_presentation.start_workout.StartWorkoutScreen
 import com.example.workout_logger_presentation.workout_logger_overview.WorkoutLoggerOverviewScreen
 import com.hbaez.workoutlogger.ui.theme.CaloryTrackerTheme
 import com.hbaez.core.domain.preferences.Preferences
@@ -118,9 +119,29 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(
                                         Route.WORKOUT_CREATE
                                     )
+                                },
+                                onNavigateToWorkout = { workoutName ->
+                                    navController.navigate(
+                                        Route.WORKOUT_START + "/$workoutName"
+                                    )
                                 }
                             )
                         }
+
+                        composable(
+                            route = Route.WORKOUT_START + "/{workoutName}",
+                            arguments = listOf(
+                                navArgument("workoutName") {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
+                            val workoutName = it.arguments?.getString("workoutName") ?: ""
+                            StartWorkoutScreen(
+                                workoutName = workoutName
+                            )
+                        }
+
 
                         composable(Route.WORKOUT_CREATE) {
                             CreateWorkoutScreen(

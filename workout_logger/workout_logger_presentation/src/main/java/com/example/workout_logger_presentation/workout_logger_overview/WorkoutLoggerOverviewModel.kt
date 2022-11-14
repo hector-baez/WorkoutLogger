@@ -60,9 +60,6 @@ class WorkoutLoggerOverviewModel @Inject constructor(
                     }
                 }.launchIn(viewModelScope)
             }
-            is WorkoutLoggerOverviewEvent.OnChooseWorkout -> {
-                
-            }
         }
     }
 

@@ -107,20 +107,6 @@ class SearchExerciseViewModel @Inject constructor(
 
     private fun trackExercise(exercise: TrackableExerciseState, rowId: Int){
         viewModelScope.launch {
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.id.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.name!!)
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.exerciseBase.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.description.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscles.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscles_secondary.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.equipment.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.image_url.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.is_main.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.is_front.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscle_name_main.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.image_url_main.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.image_url_secondary.toString())
-            Log.println(Log.DEBUG, "trackedExercise", exercise.exercise.muscle_name_secondary.toString())
             preferences.newTrackedExercise(
                 TrackedExercise(
                     rowId = rowId,

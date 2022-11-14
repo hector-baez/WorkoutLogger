@@ -34,6 +34,7 @@ import com.hbaez.core_ui.LocalSpacing
 @Composable
 fun WorkoutLoggerOverviewScreen(
     onNavigateToCreate: () -> Unit,
+    onNavigateToWorkout: (workoutName: String) -> Unit,
     viewModel: WorkoutLoggerOverviewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
@@ -75,7 +76,7 @@ fun WorkoutLoggerOverviewScreen(
                 Log.println(Log.DEBUG, "inside WorkoutDialog", state.workoutNames.toString())
                 WorkoutDialog(
                     onDismiss = { showDialog.value = false },
-                    onChooseWorkout = { viewModel.onEvent(WorkoutLoggerOverviewEvent.OnChooseWorkout(it)) },
+                    onChooseWorkout = { onNavigateToWorkout(it) },
                     workoutNames = state.workoutNames
                 )
             }
