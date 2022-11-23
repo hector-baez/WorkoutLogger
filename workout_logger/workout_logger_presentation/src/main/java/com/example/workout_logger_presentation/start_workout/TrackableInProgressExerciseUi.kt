@@ -5,16 +5,16 @@ import com.example.workout_logger_domain.model.TrackedExercise
 data class TrackableInProgressExerciseUi(
     val name: String = "",
     val origSets: String = "",
-    val sets: String = "",
+    val sets: String = "0",
     val origReps: String = "",
-    val reps: String = "",
+    val reps: List<String> = List(sets.toInt()) { "" },
     val origRest: String = "",
-    val rest: String = "",
+    val rest: List<String> = List(sets.toInt()) { "" },
     val origWeight: String = "",
-    val weight: String = "",
+    val weight: List<String> = List(sets.toInt()) { "" },
     val id: Int = 0,
     val exerciseId: Int?,
     val exercise: TrackedExercise?,
-    val isCompleted: Boolean,
-    val isInRestTimer: Boolean
+    val isCompleted: List<Boolean> = List(sets.toInt()) { false },
+    val timerStatus: TimerStatus = TimerStatus.START
 )
