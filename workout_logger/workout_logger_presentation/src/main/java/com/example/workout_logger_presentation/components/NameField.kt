@@ -19,12 +19,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.hbaez.core_ui.LocalSpacing
 import com.hbaez.workout_logger_presentation.R
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NameField(
     text: String,
@@ -40,7 +43,8 @@ fun NameField(
     modifier: Modifier = Modifier,
     hint: String,
     shouldShowHint: Boolean = false,
-    onFocusChanged: (FocusState) -> Unit
+    onFocusChanged: (FocusState) -> Unit,
+    keyboardController: SoftwareKeyboardController?
 ){
     val spacing = LocalSpacing.current
     Box(
@@ -51,6 +55,13 @@ fun NameField(
             label = { Text(text = hint) } ,
             onValueChange = onValueChange,
             singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                    defaultKeyboardAction(ImeAction.Done)
+                }
+            ),
             modifier = Modifier
                 .clip(RoundedCornerShape(5.dp))
                 .shadow(

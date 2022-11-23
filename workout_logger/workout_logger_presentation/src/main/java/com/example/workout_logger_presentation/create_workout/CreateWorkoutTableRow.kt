@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.hbaez.core_ui.LocalSpacing
@@ -106,7 +108,13 @@ fun RowScope.EditTableCell(
             .background(MaterialTheme.colors.surface)
             .weight(weight)
             .fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, keyboardType = keyboardType),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                defaultKeyboardAction(ImeAction.Next)
+            }
+
+        ),
         enabled = !isRevealed && !hasExercise
     )
 }

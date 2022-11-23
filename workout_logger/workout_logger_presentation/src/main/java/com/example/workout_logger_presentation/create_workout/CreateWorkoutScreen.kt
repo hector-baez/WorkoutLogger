@@ -37,10 +37,13 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.workout_logger_presentation.search_exercise.SearchExerciseEvent
 import com.hbaez.core.util.UiEvent
 import kotlinx.coroutines.flow.collect
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalCoilApi
 @Composable
 fun CreateWorkoutScreen(
@@ -53,6 +56,7 @@ fun CreateWorkoutScreen(
     val state = viewModel.state
 
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit){
         viewModel.onEvent(CreateWorkoutEvent.CheckTrackedExercise)
@@ -82,7 +86,8 @@ fun CreateWorkoutScreen(
                     },
                     onFocusChanged = {
                         viewModel.onEvent(CreateWorkoutEvent.OnWorkoutNameFocusChange(it.isFocused))
-                    }
+                    },
+                    keyboardController = keyboardController
                 )
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
                 CreateWorkoutTableHeader()

@@ -1,8 +1,5 @@
 package com.example.workout_logger_presentation.start_workout.components
 
-import android.util.Log
-import android.widget.CheckBox
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
@@ -28,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,7 +42,7 @@ fun ExerciseCard(
     trackableInProgressExercise: TrackableInProgressExerciseUi,
     onRepsChange: (reps: String, index: Int, id: Int) -> Unit,
     onWeightChange: (weight: String, index: Int, id: Int) -> Unit,
-    onCheckboxChange: (isCompleted: Boolean, index: Int, id: Int, page: Int) -> Unit,
+    onCheckboxChange: (isCompleted: Boolean, index: Int, id: Int, page: Int) -> Unit
 ){
     val spacing = LocalSpacing.current
     Card(
@@ -129,7 +128,12 @@ fun ExerciseCardRow(
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
             singleLine = true,
             onValueChange = { onWeightChange(it, index, trackableInProgressExercise.id) },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    defaultKeyboardAction(ImeAction.Next)
+                }
+            ),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.background,
                 focusedIndicatorColor = MaterialTheme.colors.primaryVariant,
@@ -143,7 +147,12 @@ fun ExerciseCardRow(
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
             singleLine = true,
             onValueChange = { onRepsChange(it, index, trackableInProgressExercise.id) },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    defaultKeyboardAction(ImeAction.Next)
+                }
+            ),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.background,
                 focusedIndicatorColor = MaterialTheme.colors.primaryVariant,
