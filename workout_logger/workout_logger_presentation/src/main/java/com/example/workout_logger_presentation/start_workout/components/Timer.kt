@@ -1,6 +1,10 @@
 package com.example.workout_logger_presentation.start_workout.components
 
+import android.content.Context
+import android.os.Build
+import android.os.VibratorManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -22,6 +26,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -36,12 +41,16 @@ import com.example.workout_logger_presentation.start_workout.TimerStatus
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.hbaez.workout_logger_presentation.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.Math.PI
 import java.util.concurrent.TimeUnit
 import kotlin.math.cos
 import kotlin.math.sin
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalPagerApi::class)
 @ExperimentalCoilApi
 @Composable
@@ -56,9 +65,12 @@ fun Timer(
     viewModel: StartWorkoutViewModel = hiltViewModel()
     ){
 
+    val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
+    val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+    val vibrator = vibratorManager.defaultVibrator
+
     val state = viewModel.state
-    Log.println(Log.DEBUG, "trackableIPExercise", state.trackableInProgressExercise.size.toString())
     val currentTime = viewModel.currentTime
 
     var size by remember {
@@ -70,22 +82,25 @@ fun Timer(
     LaunchedEffect(key1 = currentTime, key2 = state.timerStatus) {
         angleRatio.animateTo(
             targetValue = if (state.timeDuration.seconds > 0 && state.timerStatus == TimerStatus.RUNNING) {
-                currentTime / (state.timeDuration.seconds * 1000).toFloat()
+                (currentTime / 1000L) / (state.timeDuration.seconds).toFloat()
             } else 1f,
             animationSpec = tween(
                 durationMillis = 300
             )
         )
     }
-    LaunchedEffect(key1 = currentTime, key2 = state.timerStatus) {
-        if(currentTime > 0 && state.timerStatus == TimerStatus.RUNNING) {
-            delay(100L)
-            viewModel.onEvent(StartWorkoutEvent.ChangeRemainingTime)
+    LaunchedEffect(key1 = currentTime, key2 = state.timerStatus, block = {
+        CoroutineScope(Dispatchers.IO).launch {
+            if(state.timerStatus == TimerStatus.RUNNING && currentTime > 0){
+                delay(100)
+                viewModel.onEvent(StartWorkoutEvent.ChangeRemainingTime)
+            }
+            if(currentTime <= 0L){
+                viewModel.onEvent(StartWorkoutEvent.TimerFinished)
+                NotificationUtil.hideTimerNotification(context)
+            }
         }
-        if(currentTime == 0L){
-            viewModel.onEvent(StartWorkoutEvent.TimerFinished)
-        }
-    }
+    })
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier

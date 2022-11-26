@@ -1,9 +1,7 @@
 package com.example.workout_logger_presentation.workout_logger_overview.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -30,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.example.workout_logger_presentation.components.AddButton
-import com.example.workout_logger_presentation.workout_logger_overview.WorkoutLoggerOverviewEvent
-import com.example.workout_logger_presentation.workout_logger_overview.WorkoutLoggerOverviewState
 import com.hbaez.core.R
 import com.hbaez.core_ui.LocalSpacing
 

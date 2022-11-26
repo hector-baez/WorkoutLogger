@@ -1,6 +1,5 @@
 package com.example.workout_logger_presentation.search_exercise
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -26,7 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
-import com.example.workout_logger_presentation.components.NameField
 import com.hbaez.core_ui.LocalSpacing
 import com.hbaez.workout_logger_presentation.R
 import androidx.compose.foundation.lazy.items
@@ -37,7 +34,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
-import com.example.workout_logger_domain.model.TrackedExercise
 import com.example.workout_logger_presentation.components.SearchTextField
 import com.example.workout_logger_presentation.search_exercise.components.TrackableExerciseItem
 import com.hbaez.core.util.UiEvent

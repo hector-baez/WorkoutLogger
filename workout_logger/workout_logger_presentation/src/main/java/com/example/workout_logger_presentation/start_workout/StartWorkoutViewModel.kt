@@ -1,5 +1,9 @@
 package com.example.workout_logger_presentation.start_workout
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,6 +12,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.workout_logger_domain.use_case.ExerciseTrackerUseCases
+import com.example.workout_logger_presentation.start_workout.components.TimerExpiredReceiver
+import com.hbaez.core.domain.preferences.Preferences
 import com.hbaez.core.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -17,12 +23,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 import java.time.Duration
-import java.util.concurrent.TimeUnit
+import java.util.Date
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class StartWorkoutViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-//    private val preferences: Preferences,
+    private val preferences: Preferences,
     private val startWorkoutUseCases: ExerciseTrackerUseCases
 ): ViewModel() {
 
@@ -69,7 +76,11 @@ class StartWorkoutViewModel @Inject constructor(
                 )
             }
             is StartWorkoutEvent.OnCheckboxChange -> {
-
+                if(state.currRunningIndex != event.currRunningIndex){
+                    state = state.copy(
+                        startTime = Date()
+                    )
+                }
                 state = state.copy(
                     trackableInProgressExercise = state.trackableInProgressExercise.toList().map {
                         if(it.id == event.id){
@@ -86,7 +97,8 @@ class StartWorkoutViewModel @Inject constructor(
                 currentTime = if(event.isChecked && event.timerStatus == TimerStatus.RUNNING) { state.timeDuration.seconds * 1000L } else currentTime
             }
             is StartWorkoutEvent.ChangeRemainingTime -> {
-                currentTime -= 100L
+                val diff = Date().time - state.startTime.time
+                currentTime = state.timeDuration.toMillis() - diff
             }
             is StartWorkoutEvent.UpdateRemainingTime -> {
                 currentTime = currentTime
@@ -101,7 +113,8 @@ class StartWorkoutViewModel @Inject constructor(
             }
             is StartWorkoutEvent.TimerFinished -> {
                 state = state.copy(
-                    timerStatus = TimerStatus.FINISHED
+                    timerStatus = TimerStatus.FINISHED,
+                    currRunningIndex = -1
                 )
             }
         }
@@ -133,5 +146,27 @@ class StartWorkoutViewModel @Inject constructor(
                     }.toMutableList()
                 )
             }.launchIn(viewModelScope)
+    }
+
+    companion object {
+        private var isRunning: Boolean = false
+
+        fun setAlarm(context: Context, timeDuration: Duration): Long{
+            Log.println(Log.DEBUG, "setAlarm", "reached setAlarm")
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, TimerExpiredReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+            Log.println(Log.DEBUG, "current Time", Date().time.toString())
+            val wakeUpTime = (Date().time + timeDuration.toMillis())
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
+            return wakeUpTime
+        }
+
+        fun removeAlarm(context: Context){
+            val intent = Intent(context, TimerExpiredReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(pendingIntent)
+        }
     }
 }

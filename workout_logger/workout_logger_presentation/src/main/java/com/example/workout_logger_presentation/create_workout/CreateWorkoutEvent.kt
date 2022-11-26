@@ -1,7 +1,5 @@
 package com.example.workout_logger_presentation.create_workout
 
-import com.example.workout_logger_presentation.search_exercise.SearchExerciseEvent
-
 sealed class CreateWorkoutEvent {
 
     object OnAddExercise: CreateWorkoutEvent()

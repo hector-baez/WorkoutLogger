@@ -1,8 +1,7 @@
 package com.example.workout_logger_presentation.start_workout
 
-import android.util.Log
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,8 +14,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -29,11 +26,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.example.workout_logger_presentation.start_workout.components.Timer
 import com.example.workout_logger_presentation.start_workout.components.ExerciseCard
+import com.example.workout_logger_presentation.start_workout.components.NotificationUtil
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.hbaez.core_ui.LocalSpacing
+import java.time.Duration
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalPagerApi::class)
 @ExperimentalCoilApi
 @Composable
@@ -46,9 +46,6 @@ fun StartWorkoutScreen(
     val context = LocalContext.current
     val pagerState = rememberPagerState(initialPage = 0)
 
-    val serviceStatus = remember {
-        mutableStateOf(false)
-    }
 
     Scaffold(
 
@@ -94,9 +91,13 @@ fun StartWorkoutScreen(
                         }
                         if(isChecked && (state.timerStatus == TimerStatus.START || state.timerStatus == TimerStatus.FINISHED)){ // non checked clicked while timer not running
                             viewModel.onEvent(StartWorkoutEvent.OnCheckboxChange(isChecked= true, timerStatus = TimerStatus.RUNNING, currRunningIndex = index, index = index, id = id, page = page))
+                            val wakeupTime = StartWorkoutViewModel.setAlarm(context = context, timeDuration = Duration.ofSeconds(state.trackableInProgressExercise[page].origRest.toLong()))
+                            NotificationUtil.showTimerRunning(context, wakeupTime)
                         }
                         else if(!isChecked && state.currRunningIndex == index && state.timerStatus == TimerStatus.RUNNING){ // checked clicked while that row has timer running
                             viewModel.onEvent(StartWorkoutEvent.OnCheckboxChange(isChecked= true, timerStatus = TimerStatus.FINISHED, currRunningIndex = -1, index = index, id = id, page = page))
+                            StartWorkoutViewModel.removeAlarm(context)
+                            NotificationUtil.hideTimerNotification(context)
                         }
                         else if(!isChecked && state.currRunningIndex != index){ // checked clicked while that row does not have timer running
                             viewModel.onEvent(StartWorkoutEvent.OnCheckboxChange(isChecked= false, timerStatus = state.timerStatus, currRunningIndex = state.currRunningIndex, index = index, id = id, page = page))

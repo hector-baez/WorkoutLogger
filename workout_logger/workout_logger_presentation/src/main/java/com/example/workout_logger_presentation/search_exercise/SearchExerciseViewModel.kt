@@ -1,13 +1,11 @@
 package com.example.workout_logger_presentation.search_exercise
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.workout_logger_domain.use_case.ExerciseTrackerUseCases
-import com.example.workout_logger_presentation.create_workout.TrackableExerciseUiState
 import com.hbaez.core.util.UiEvent
 import com.hbaez.core.util.UiText
 import com.hbaez.core.R
