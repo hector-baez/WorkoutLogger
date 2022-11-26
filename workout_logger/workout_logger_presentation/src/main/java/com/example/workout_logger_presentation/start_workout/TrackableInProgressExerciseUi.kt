@@ -1,5 +1,7 @@
 package com.example.workout_logger_presentation.start_workout
 
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.graphics.Color
 import com.example.workout_logger_domain.model.TrackedExercise
 
 data class TrackableInProgressExerciseUi(
@@ -16,5 +18,6 @@ data class TrackableInProgressExerciseUi(
     val exerciseId: Int?,
     val exercise: TrackedExercise?,
     val isCompleted: List<Boolean> = List(sets.toInt()) { false },
-    val timerStatus: TimerStatus = TimerStatus.START
+    val timerStatus: TimerStatus = TimerStatus.START,
+    val checkedColor: List<Color> = List(sets.toInt()) { Color.DarkGray }
 )

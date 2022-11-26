@@ -1,5 +1,7 @@
 package com.example.workout_logger_presentation.start_workout
 
+import androidx.compose.ui.graphics.Color
+
 sealed class StartWorkoutEvent {
 
     data class OnRepsChange(val reps: String, val index: Int, val id: Int): StartWorkoutEvent()
@@ -15,4 +17,6 @@ sealed class StartWorkoutEvent {
     data class OnChangePage(val currentPage: Int): StartWorkoutEvent()
 
     object TimerFinished: StartWorkoutEvent()
+
+    data class ChangeCheckboxColor(val color: Color, val id: Int, val index: Int): StartWorkoutEvent()
 }

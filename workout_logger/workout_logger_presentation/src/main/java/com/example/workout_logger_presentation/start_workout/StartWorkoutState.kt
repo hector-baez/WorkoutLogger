@@ -11,6 +11,7 @@ data class StartWorkoutState(
     val timeDuration: Duration = Duration.ofSeconds(30),
     val remainingTime: Long = timeDuration.toMillis(),
     val currRunningIndex: Int = -1,
+    val currRunningId: Int = -1,
     val startTime: Date = Date()
 )
 

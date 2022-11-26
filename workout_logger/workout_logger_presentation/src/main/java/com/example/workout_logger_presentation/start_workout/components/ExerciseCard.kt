@@ -15,6 +15,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxColors
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -164,7 +166,10 @@ fun ExerciseCardRow(
             checked = trackableInProgressExercise.isCompleted[index],
             onCheckedChange = {
                 onCheckboxChange(it, index, trackableInProgressExercise.id, page)
-            }
+            },
+            colors = CheckboxDefaults.colors(
+                checkedColor = trackableInProgressExercise.checkedColor[index]
+            )
         )
 
     }

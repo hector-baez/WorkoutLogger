@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -92,7 +93,8 @@ class StartWorkoutViewModel @Inject constructor(
                     timerStatus = event.timerStatus,
                     pagerIndex = event.page,
                     timeDuration = Duration.ofSeconds(state.trackableInProgressExercise[event.page].origRest.toLong()),
-                    currRunningIndex = event.currRunningIndex
+                    currRunningIndex = event.currRunningIndex,
+                    currRunningId = event.id
                 )
                 currentTime = if(event.isChecked && event.timerStatus == TimerStatus.RUNNING) { state.timeDuration.seconds * 1000L } else currentTime
             }
@@ -112,9 +114,22 @@ class StartWorkoutViewModel @Inject constructor(
                 )
             }
             is StartWorkoutEvent.TimerFinished -> {
+                Log.println(Log.DEBUG, "!!!! current page", state.pagerIndex.toString())
                 state = state.copy(
                     timerStatus = TimerStatus.FINISHED,
-                    currRunningIndex = -1
+                    currRunningIndex = -1,
+                    currRunningId = -1
+                )
+            }
+            is StartWorkoutEvent.ChangeCheckboxColor -> {
+                state = state.copy(
+                    trackableInProgressExercise = state.trackableInProgressExercise.toList().map {
+                        if(it.id == event.id){
+                            val tmp = it.checkedColor.toMutableList()
+                            tmp[event.index] = event.color
+                            it.copy(checkedColor = tmp)
+                        } else it
+                    }.toMutableList()
                 )
             }
         }

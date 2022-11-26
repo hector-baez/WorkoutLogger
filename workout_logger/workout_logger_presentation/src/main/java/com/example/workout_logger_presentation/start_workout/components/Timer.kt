@@ -96,6 +96,7 @@ fun Timer(
                 viewModel.onEvent(StartWorkoutEvent.ChangeRemainingTime)
             }
             if(currentTime <= 0L){
+                viewModel.onEvent(StartWorkoutEvent.ChangeCheckboxColor(Color.DarkGray, state.currRunningId, state.currRunningIndex))
                 viewModel.onEvent(StartWorkoutEvent.TimerFinished)
                 NotificationUtil.hideTimerNotification(context)
             }
