@@ -79,4 +79,5 @@
     <string name="rest_day">Rest Day? ಠ_ಠ</string>
     <string name="completed_question">Completed?</string>
     <string name="null_time">00:00</string>
+    <string name="finish">Finish</string>
 </resources>
