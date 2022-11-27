@@ -1,6 +1,7 @@
 package com.example.workout_logger_presentation.workout_logger_overview.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,11 +50,12 @@ fun CompletedWorkoutItem(
         modifier = modifier
             .clip(RoundedCornerShape(100f))
             .clickable { onClick() }
-            .border(
-                width = 1.dp,
-                color = color,
-                shape = RoundedCornerShape(100f)
-            )
+//            .border(
+//                width = 1.dp,
+//                color = color,
+//                shape = RoundedCornerShape(100f)
+//            )
+            .background(color = MaterialTheme.colors.surface)
     ) {
         Row(
             modifier = Modifier
@@ -94,22 +96,6 @@ fun CompletedWorkoutItem(
                 )
                 Text(
                     text = stringResource(id = R.string.sets),
-                    color = MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.body1,
-                    fontWeight = FontWeight.Light
-                )
-            }
-            Spacer(modifier = Modifier.width(spacing.spaceMedium))
-            Column(
-                modifier = modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = workout.rest.toString(),
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = stringResource(id = R.string.rest),
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body1,
                     fontWeight = FontWeight.Light

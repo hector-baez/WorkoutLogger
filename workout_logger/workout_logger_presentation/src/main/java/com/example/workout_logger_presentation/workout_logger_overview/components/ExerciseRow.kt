@@ -18,7 +18,6 @@ fun ExerciseRow(
     set: Int,
     reps: Int,
     weight: Int,
-    rest: Int,
     completed: Boolean
 ){
     Row(
@@ -37,10 +36,6 @@ fun ExerciseRow(
         )
         Text(
             text= reps.toString(),
-            style = MaterialTheme.typography.body2
-        )
-        Text(
-            text= rest.toString(),
             style = MaterialTheme.typography.body2
         )
         Checkbox(

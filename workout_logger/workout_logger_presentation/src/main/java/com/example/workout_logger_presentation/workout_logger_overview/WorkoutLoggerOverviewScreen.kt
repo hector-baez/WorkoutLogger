@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.example.workout_logger_presentation.components.AddButton
@@ -126,10 +128,6 @@ fun WorkoutLoggerOverviewScreen(
                                 style = MaterialTheme.typography.body2
                             )
                             Text(
-                                text= stringResource(id = R.string.rest),
-                                style = MaterialTheme.typography.body2
-                            )
-                            Text(
                                 text= stringResource(id = R.string.completed_question),
                                 style = MaterialTheme.typography.body2
                             )
@@ -142,22 +140,24 @@ fun WorkoutLoggerOverviewScreen(
                                     set = i,
                                     reps = reps[i-1],
                                     weight = weight[i-1],
-                                    rest = completedWorkout.rest,
                                     completed = true
                                 )
-                            } else {
+                            }
+                            else {
                                 ExerciseRow(
                                     set = i,
                                     reps = 0,
                                     weight = 0,
-                                    rest = 0,
+//                                    rest = 0,
                                     completed = false
                                 )
                             }
+                            if(i != completedWorkout.sets) Divider(color = MaterialTheme.colors.primaryVariant, thickness = 1.dp)
                         }
+                        Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
                     }
                 },
-                color = MaterialTheme.colors.primary
+//                color = MaterialTheme.colors.primaryVariant
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
         }
