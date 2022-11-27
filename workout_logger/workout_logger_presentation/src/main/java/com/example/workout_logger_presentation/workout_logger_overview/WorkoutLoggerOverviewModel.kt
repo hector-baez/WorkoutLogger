@@ -64,6 +64,17 @@ class WorkoutLoggerOverviewModel @Inject constructor(
                     }
                 }.launchIn(viewModelScope)
             }
+            is WorkoutLoggerOverviewEvent.OnCompletedWorkoutClick -> {
+                state = state.copy(
+                    completedWorkouts = state.completedWorkouts.map {
+                        if(it.id == event.completedWorkout.id){
+                            it.copy(
+                                isExpanded = !it.isExpanded
+                            )
+                        } else it
+                    }
+                )
+            }
         }
     }
 

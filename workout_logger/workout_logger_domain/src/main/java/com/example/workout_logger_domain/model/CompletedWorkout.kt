@@ -12,5 +12,6 @@ data class CompletedWorkout(
     val weight: String,
     val dayOfMonth: Int,
     val month: Int,
-    val year: Int
+    val year: Int,
+    val isExpanded: Boolean = false
 )

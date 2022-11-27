@@ -11,12 +11,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hbaez.core_ui.LocalSpacing
+import com.hbaez.workout_logger_presentation.R
 
 
 @Composable
@@ -37,21 +40,13 @@ fun OptionsHeader(
             )
             .background(MaterialTheme.colors.primary)
             .padding(
-                vertical = spacing.spaceExtraLarge
+                vertical = spacing.spaceExtraLarge,
+                horizontal = spacing.spaceSmall
             )
     ) {
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
         AddButton(
-            text = "Start Workout",
-            onClick = {
-                      displayWorkouts()
-                      },
-            modifier = Modifier.fillMaxWidth(),
-            icon = Icons.Default.AddCircle
-        )
-        Spacer(modifier = Modifier.height(spacing.spaceMedium))
-        AddButton(
-            text = "Create Workout",
+            text = stringResource(id = R.string.create_workout),
             onClick = {
                 onNavigateToCreate(
 
@@ -61,7 +56,9 @@ fun OptionsHeader(
             icon = Icons.Default.Build
         )
         Spacer(modifier = Modifier.height(spacing.spaceMedium))
-        AddButton(text = "Edit Workout", onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), icon = Icons.Default.Edit)
+        AddButton(text = stringResource(id = R.string.edit_workout), onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), icon = Icons.Default.Edit)
+        Spacer(modifier = Modifier.height(spacing.spaceMedium))
+        AddButton(text = stringResource(id = R.string.create_edit_exercise), onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), icon = Icons.Default.Edit)
         Spacer(modifier = Modifier.height(spacing.spaceLarge))
     }
 }

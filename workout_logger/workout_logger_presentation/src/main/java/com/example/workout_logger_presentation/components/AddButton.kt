@@ -48,6 +48,7 @@ fun AddButton(
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Text(
             text = text,
+            maxLines = 2,
             style = MaterialTheme.typography.button,
             color = color
         )
