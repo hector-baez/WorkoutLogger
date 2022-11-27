@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.workout_logger_domain.model.CompletedWorkout
 import com.example.workout_logger_domain.use_case.ExerciseTrackerUseCases
 import com.hbaez.core.domain.preferences.Preferences
 import com.hbaez.core.util.UiEvent
@@ -40,21 +41,26 @@ class WorkoutLoggerOverviewModel @Inject constructor(
                 state = state.copy(
                     date = state.date.plusDays(1)
                 )
+                refreshWorkouts()
             }
             is WorkoutLoggerOverviewEvent.OnPreviousDayClick -> {
                 state = state.copy(
                     date = state.date.minusDays(1)
                 )
+                refreshWorkouts()
             }
             is WorkoutLoggerOverviewEvent.OnStartWorkoutClick -> {
                 getWorkoutNames?.cancel()
                 val workoutNames = mutableListOf<String>()
+                val workoutId = mutableListOf<Int>()
                 getWorkoutNames = exerciseTrackerUseCases.getWorkouts().onEach {
                     it.onEach { trackedWorkout ->
                         state = state.copy(
-                            workoutNames = (workoutNames + trackedWorkout.name).toMutableList()
+                            workoutNames = (workoutNames + trackedWorkout.name).toMutableList(),
+                            workoutId = (workoutId + trackedWorkout.workoutId!!).toMutableList()
                         )
                         workoutNames.add(trackedWorkout.name)
+                        workoutId.add(trackedWorkout.workoutId!!)
                     }
                 }.launchIn(viewModelScope)
             }
@@ -62,6 +68,15 @@ class WorkoutLoggerOverviewModel @Inject constructor(
     }
 
     private fun refreshWorkouts(){
+        getWorkoutsForDateJob?.cancel()
+        getWorkoutsForDateJob = exerciseTrackerUseCases
+            .getWorkoutsForDate(state.date)
+            .onEach { completedWorkouts ->
+                state = state.copy(
+                    completedWorkouts = completedWorkouts
+                    )
+            }
+            .launchIn(viewModelScope)
     }
 
 }

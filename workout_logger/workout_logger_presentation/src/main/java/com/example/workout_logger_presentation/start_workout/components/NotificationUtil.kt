@@ -35,7 +35,7 @@ class NotificationUtil {
             val nBuilder = getBasicNotificationBuilder(context, CHANNEL_ID_TIMER_EXPIRED, true)
             nBuilder.setContentTitle("Timer Expired!")
                 .setContentText("Start again?")
-                .addAction(R.drawable.ic_exercise, "Start", startPendingIntent)
+                .addAction(R.drawable.ic_idle, "Start", startPendingIntent)
 
             val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nManager.createNotificationChannel(CHANNEL_ID_TIMER_EXPIRED, CHANNEL_NAME_TIMER_EXPIRED, true)
@@ -72,10 +72,10 @@ class NotificationUtil {
                 : NotificationCompat.Builder{
             val notificationSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val nBuilder = NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_exercise)
                 .setAutoCancel(true)
+            if(channelId ==  "menu_timer") nBuilder.setSmallIcon(R.drawable.ic_exercise) else nBuilder.setSmallIcon(R.drawable.ic_idle)
 //                .setVibrate(longArrayOf(1000L))
-                if(playSound) nBuilder.setSound(notificationSound)
+            if(playSound) nBuilder.setSound(notificationSound)
             return nBuilder
         }
 
@@ -90,7 +90,7 @@ class NotificationUtil {
                 nChannel.enableLights(true)
                 nChannel.lightColor = Color.BLUE
                 nChannel.enableVibration(true)
-                nChannel.vibrationPattern = longArrayOf(1250L)
+                nChannel.vibrationPattern = longArrayOf(1500L)
                 this.createNotificationChannel(nChannel)
             }
         }

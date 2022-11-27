@@ -1,14 +1,18 @@
 package com.example.workout_logger_data.repository
 
 import com.example.workout_logger_data.local.ExerciseDao
+import com.example.workout_logger_data.mapper.toCompletedWorkout
+import com.example.workout_logger_data.mapper.toCompletedWorkoutEntity
 import com.example.workout_logger_data.mapper.toTrackedExercise
 import com.example.workout_logger_data.mapper.toTrackedWorkout
 import com.example.workout_logger_data.mapper.toWorkoutEntity
+import com.example.workout_logger_domain.model.CompletedWorkout
 import com.example.workout_logger_domain.model.TrackedExercise
 import com.example.workout_logger_domain.model.TrackedWorkout
 import com.example.workout_logger_domain.repository.ExerciseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 
 class ExerciseRepositoryImpl(
     private val dao: ExerciseDao
@@ -38,6 +42,20 @@ class ExerciseRepositoryImpl(
             entities.map {
                 it.toTrackedWorkout()
             }
+        }
+    }
+
+    override suspend fun insertCompletedWorkout(completedWorkout: CompletedWorkout) {
+        dao.insertCompletedWorkout(completedWorkout.toCompletedWorkoutEntity())
+    }
+
+    override fun getWorkoutsForDate(localDate: LocalDate): Flow<List<CompletedWorkout>> {
+        return dao.getCompletedWorkoutsByDate(
+            day = localDate.dayOfMonth,
+            month = localDate.monthValue,
+            year = localDate.year
+        ).map { entities ->
+            entities.map { it.toCompletedWorkout() }
         }
     }
 }

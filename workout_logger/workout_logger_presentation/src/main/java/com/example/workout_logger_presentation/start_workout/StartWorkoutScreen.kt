@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -38,12 +39,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.example.workout_logger_presentation.components.AddButton
 import com.example.workout_logger_presentation.components.IconButton
+import com.example.workout_logger_presentation.create_workout.CreateWorkoutEvent
 import com.example.workout_logger_presentation.start_workout.components.Timer
 import com.example.workout_logger_presentation.start_workout.components.ExerciseCard
 import com.example.workout_logger_presentation.start_workout.components.NotificationUtil
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.hbaez.core.util.UiEvent
 import com.hbaez.core_ui.LocalSpacing
 import com.hbaez.workout_logger_presentation.R
 import java.time.Duration
@@ -54,6 +57,11 @@ import java.time.Duration
 @Composable
 fun StartWorkoutScreen(
     workoutName: String,
+    workoutId: Int,
+    dayOfMonth: Int,
+    month: Int,
+    year: Int,
+    onNavigateUp: () -> Unit,
     viewModel: StartWorkoutViewModel = hiltViewModel()
 ){
     val spacing = LocalSpacing.current
@@ -61,7 +69,19 @@ fun StartWorkoutScreen(
     val context = LocalContext.current
     val pagerState = rememberPagerState(initialPage = 0)
 
-
+    LaunchedEffect(Unit){
+        viewModel.uiEvent.collect{ event ->
+            when(event) {
+//                is UiEvent.ShowSnackbar -> {
+//                    scaffoldState.snackbarHostState.showSnackbar(
+//                        message = event.message.asString(context)
+//                    )
+//                }
+                is UiEvent.NavigateUp -> onNavigateUp()
+                else -> Unit
+            }
+        }
+    }
     Scaffold(
 
         topBar = {
@@ -78,7 +98,9 @@ fun StartWorkoutScreen(
                 IconButton(
                     modifier = Modifier
                         .padding(top = spacing.spaceMedium, end = spacing.spaceMedium),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                              viewModel.onEvent(StartWorkoutEvent.OnSubmitWorkout(state.workoutName, state.trackableInProgressExercise, dayOfMonth, month, year))
+                              },
                     icon = Icons.Default.Done
                 )
             }

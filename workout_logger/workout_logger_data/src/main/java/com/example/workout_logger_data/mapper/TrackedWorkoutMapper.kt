@@ -19,6 +19,7 @@ fun TrackedWorkout.toWorkoutEntity(): WorkoutEntity {
 
 fun WorkoutEntity.toTrackedWorkout(): TrackedWorkout {
     return TrackedWorkout(
+        workoutId = id!!,
         name = name,
         exerciseName = exerciseName,
         exerciseId = exerciseId,

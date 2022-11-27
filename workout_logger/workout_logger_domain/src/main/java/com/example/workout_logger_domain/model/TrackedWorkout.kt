@@ -1,6 +1,7 @@
 package com.example.workout_logger_domain.model
 
 data class TrackedWorkout(
+    val workoutId: Int?,
     val name: String,
     val exerciseName: String,
     val exerciseId: Int?,

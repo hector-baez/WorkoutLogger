@@ -119,25 +119,58 @@ class MainActivity : ComponentActivity() {
                                         Route.WORKOUT_CREATE
                                     )
                                 },
-                                onNavigateToWorkout = { workoutName ->
+                                onNavigateToWorkout = { workoutName, workoutId, day, month, year ->
                                     navController.navigate(
-                                        Route.WORKOUT_START + "/$workoutName"
+                                        Route.WORKOUT_START +
+                                                "/$workoutName" +
+                                                "/$workoutId" +
+                                                "/$day" +
+                                                "/$month" +
+                                                "/$year"
                                     )
                                 }
                             )
                         }
 
                         composable(
-                            route = Route.WORKOUT_START + "/{workoutName}",
+                            route = Route.WORKOUT_START +
+                                    "/{workoutName}" +
+                                    "/{workoutId}" +
+                                    "/{dayOfMonth}" +
+                                    "/{month}" +
+                                    "/{year}",
                             arguments = listOf(
                                 navArgument("workoutName") {
                                     type = NavType.StringType
+                                },
+                                navArgument("workoutId") {
+                                    type = NavType.IntType
+                                },
+                                navArgument("dayOfMonth") {
+                                    type = NavType.IntType
+                                },
+                                navArgument("month") {
+                                    type = NavType.IntType
+                                },
+                                navArgument("year") {
+                                    type = NavType.IntType
                                 }
                             )
                         ) {
                             val workoutName = it.arguments?.getString("workoutName") ?: ""
+                            val workoutId = it.arguments?.getInt("workoutId") ?: -1
+                            val dayOfMonth = it.arguments?.getInt("dayOfMonth")!!
+                            val month = it.arguments?.getInt("month")!!
+                            val year = it.arguments?.getInt("year")!!
                             StartWorkoutScreen(
-                                workoutName = workoutName
+                                workoutName = workoutName,
+                                workoutId = workoutId,
+                                dayOfMonth = dayOfMonth,
+                                month = month,
+                                year = year,
+                                onNavigateUp = {
+                                    navController.navigateUp()
+                                }
                             )
                         }
 

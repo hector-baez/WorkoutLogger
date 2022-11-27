@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.workout_logger_data.local.entity.CompletedWorkoutEntity
 import com.example.workout_logger_data.local.entity.ExerciseEntity
 import com.example.workout_logger_data.local.entity.WorkoutEntity
 import kotlinx.coroutines.flow.Flow
@@ -42,4 +43,16 @@ interface ExerciseDao {
         """
     )
     fun getWorkoutsByName(workoutName: String): Flow<List<WorkoutEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCompletedWorkout(completedWorkoutEntity: CompletedWorkoutEntity)
+
+    @Query(
+        """
+            SELECT *
+            FROM completedworkoutentity
+            WHERE dayOfMonth = :day AND month = :month AND year = :year
+        """
+    )
+    fun getCompletedWorkoutsByDate(day: Int, month: Int, year: Int): Flow<List<CompletedWorkoutEntity>>
 }

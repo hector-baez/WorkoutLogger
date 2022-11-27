@@ -22,6 +22,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import java.time.Duration
 import java.util.Date
@@ -41,6 +42,7 @@ class StartWorkoutViewModel @Inject constructor(
         private set
 
     private var workoutName: String
+    private var workoutId: Int
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -49,6 +51,7 @@ class StartWorkoutViewModel @Inject constructor(
 
     init {
         workoutName = savedStateHandle.get("workoutName") ?: ""
+        workoutId = savedStateHandle.get("workoutId") ?: -1
         getWorkout()
     }
 
@@ -132,6 +135,33 @@ class StartWorkoutViewModel @Inject constructor(
                     }.toMutableList()
                 )
             }
+            is StartWorkoutEvent.OnSubmitWorkout -> {
+                run breaking@{
+                    if(state.timerStatus == TimerStatus.RUNNING){
+                        return@breaking
+                    }
+                    event.trackableExercises.forEach{// for each exercise
+                        val repsList = mutableListOf<String>()
+                        val weightList = mutableListOf<String>()
+                        it.isCompleted.forEachIndexed { index, b ->  // for each set in exercise
+                            if(b){
+                                if(it.reps[index].isEmpty()){
+                                    repsList.add(it.origReps)
+                                } else repsList.add(it.reps[index])
+                                if(it.weight[index].isEmpty()){
+                                    weightList.add(it.origWeight)
+                                } else weightList.add(it.weight[index])
+                            }
+                        }
+                        if(repsList.isNotEmpty() && weightList.isNotEmpty()){
+                            trackCompletedWorkout(it, repsList, weightList, event.dayOfMonth, event.month, event.year)
+                        }
+                    }
+                }
+                viewModelScope.launch {
+                    _uiEvent.send(UiEvent.NavigateUp)
+                }
+            }
         }
     }
 
@@ -147,11 +177,11 @@ class StartWorkoutViewModel @Inject constructor(
                             origSets = it.sets.toString(),
                             sets = it.sets.toString(),
                             origReps = it.reps.toString(),
-                            reps = List(it.sets) { _ -> it.reps.toString() },
+                            reps = List(it.sets) { "" },
                             origRest = it.rest.toString(),
                             rest = List(it.sets) { _ -> it.rest.toString() },
                             origWeight = it.weight.toString(),
-                            weight = List(it.sets) { _ -> it.weight.toString() },
+                            weight = List(it.sets) { "" },
                             id = it.rowId,
                             exerciseId = it.exerciseId,
                             exercise = null,
@@ -161,6 +191,24 @@ class StartWorkoutViewModel @Inject constructor(
                     }.toMutableList()
                 )
             }.launchIn(viewModelScope)
+    }
+
+    private fun trackCompletedWorkout(trackableInProgressExerciseUi: TrackableInProgressExerciseUi, repsList: List<String>, weightList: List<String>, dayOfMonth: Int, month: Int, year: Int){
+        viewModelScope.launch {
+            startWorkoutUseCases.addCompletedWorkout(
+                workoutName = workoutName,
+                workoutId = workoutId,
+                exerciseName = trackableInProgressExerciseUi.name,
+                exerciseId = trackableInProgressExerciseUi.exerciseId,
+                sets = trackableInProgressExerciseUi.origSets.toInt(),
+                rest = trackableInProgressExerciseUi.origRest.toInt(),
+                reps = repsList.toString(),
+                weight = weightList.toString(),
+                dayOfMonth = dayOfMonth,
+                month = month,
+                year = year
+            )
+        }
     }
 
     companion object {

@@ -35,9 +35,10 @@ import com.hbaez.core_ui.LocalSpacing
 @Composable
 fun WorkoutDialog(
     onDismiss: () -> Unit,
-    onChooseWorkout: (workoutName: String) -> Unit,
+    onChooseWorkout: (workoutName: String, workoutId: Int) -> Unit,
     modifier: Modifier = Modifier,
-    workoutNames: List<String>
+    workoutNames: List<String>,
+    workoutId: List<Int>
 ) {
     val spacing = LocalSpacing.current
     AlertDialog(
@@ -78,7 +79,7 @@ fun WorkoutDialog(
                         items(workoutNames.size){
                             AddButton(
                                 text = workoutNames[it],
-                                onClick = { onChooseWorkout(workoutNames[it]) },
+                                onClick = { onChooseWorkout(workoutNames[it], workoutId[it]) },
                                 icon = Icons.Default.List,
                                 modifier = Modifier
                                     .fillMaxWidth()
